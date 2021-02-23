@@ -1,9 +1,11 @@
 package dao;
 
 import domain.Book;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,8 +22,6 @@ public class SqliteBookDaoTest {
     public void initDb() throws SQLException {
         Connection db = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = db.createStatement();
-        // Clear old db
-        s.execute("DROP TABLE IF EXISTS Books");
         s.execute("CREATE TABLE Books ( id INTEGER PRIMARY KEY, link TEXT, title TEXT );");
         sqliteDb = new SqliteBookDao("test.db");
     }
@@ -60,6 +60,12 @@ public class SqliteBookDaoTest {
 
         assertEquals(books.get(0).getTitle(), "title");
         assertEquals(books.get(1).getTitle(), "title2");
+    }
+
+    @After
+    public void deleteFile() {
+        File db = new File("test.db");
+        db.delete();
     }
 
 }
