@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
+}
+
+application {
+    mainClass = 'Main'
+}
+
+run {
+    standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
