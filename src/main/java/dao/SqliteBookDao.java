@@ -13,7 +13,7 @@ public class SqliteBookDao implements BookDao {
     public SqliteBookDao(String name) {
         try {
             this.db = DriverManager.getConnection("jdbc:sqlite:" + name);
-            createTable("Books");
+            createTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class SqliteBookDao implements BookDao {
         }
     }
 
-    private void createTable(String name) {
+    private void createTable() {
         try {
             Statement statement = this.db.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS Books (id INT PRIMARY KEY, link TEXT, title TEXT)");

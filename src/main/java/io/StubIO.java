@@ -1,5 +1,6 @@
 package io;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StubIO implements IO {
     private ArrayList<String> prints;
@@ -7,10 +8,15 @@ public class StubIO implements IO {
 
     public StubIO() {
         prints = new ArrayList<>();
-
         inputs = new ArrayList<>();
-        inputs.add("www.linkki.com");
-        inputs.add("Titteli");
+    }
+
+    public void addInput(String input) {
+        this.inputs.add(input);
+    }
+
+    public void addInput(List<String> inputs) {
+        this.inputs.addAll(inputs);
     }
 
     public void print(String s) {
