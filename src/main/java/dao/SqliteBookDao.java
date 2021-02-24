@@ -13,6 +13,7 @@ public class SqliteBookDao implements BookDao {
     public SqliteBookDao(String name) {
         try {
             this.db = DriverManager.getConnection("jdbc:sqlite:" + name);
+            createTable("Books");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +46,16 @@ public class SqliteBookDao implements BookDao {
 
             return books;
         } catch (Exception e) {
-            return null;
+            return new ArrayList<Book>();
+        }
+    }
+
+    private void createTable(String name) {
+        try {
+            Statement statement = this.db.createStatement();
+            statement.execute("CREATE TABLE IF NOT EXISTS Books (id INT PRIMARY KEY, link TEXT, title TEXT)");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

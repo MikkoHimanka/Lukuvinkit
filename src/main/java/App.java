@@ -13,7 +13,7 @@ public class App {
 
     public void listAll() {
         List<Book> books = dao.getAll();
-        io.print("Found " + String.valueOf(books.size()) + " books:");
+        io.print("Found " + books.size() + " books:");
         io.print("****");
         for(int i = 0; i < books.size(); ++i) {
             printBook(books.get(i));
@@ -24,5 +24,27 @@ public class App {
     private void printBook(Book book) {
         io.print("Link: " + book.getLink());
         io.print("Title: " + book.getTitle());
+    }
+
+    public void createBook() {
+        io.print("Add link:");
+        String link = io.getInput();
+        io.print("Add title:");
+        String title = io.getInput();
+
+        dao.create(new Book(link, title));
+    }
+
+    public void switchContext() {
+        io.print("What do you want to do? (A)dd a new book / (L)ist all books");
+        String selection = io.getInput().toLowerCase();
+        switch (selection) {
+            case "a":   createBook();
+                        break;
+            case "l":   listAll();
+                        break;
+            default:    io.print("ERROR: selection not valid!");
+                        break;
+        }
     }
 }
