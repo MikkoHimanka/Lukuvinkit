@@ -32,7 +32,12 @@ public class App {
         io.print("Add title:");
         String title = io.getInput();
 
-        dao.create(new Book(link, title));
+        Book result = dao.create(new Book(link, title));
+        if (result != null) {
+            io.print("Book added successfully!");
+        } else {
+            io.print("There was a problem adding a book!");
+        }
     }
 
     public void switchContext() {
