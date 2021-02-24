@@ -2,6 +2,8 @@
 
 Ohjelmistotuotannon miniprojekti 2021. Sovelluksen käyttötarkoitus on lukuvinkkien hallinta.
 
+[Käyttöohje](https://github.com/MikkoHimanka/Lukuvinkit/blob/main/dokumentaatio/kayttoohje.md)
+
 [Ohjeet tietokannan käyttöön](https://github.com/MikkoHimanka/Lukuvinkit/blob/main/dokumentaatio/tietokanta.md)
 
 [Projektin backlog](https://docs.google.com/spreadsheets/d/1CIW-hC3u8IiUHmzEYxtJPugE3DNGhuz6VQ3V5sQlzJ4/edit?usp=sharing)
