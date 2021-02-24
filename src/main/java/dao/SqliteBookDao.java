@@ -46,7 +46,7 @@ public class SqliteBookDao implements BookDao {
 
             return books;
         } catch (Exception e) {
-            return new ArrayList<Book>();
+            return null;
         }
     }
 

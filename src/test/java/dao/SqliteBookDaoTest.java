@@ -22,7 +22,7 @@ public class SqliteBookDaoTest {
     public void initDb() throws SQLException {
         Connection db = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = db.createStatement();
-        s.execute("CREATE TABLE Books ( id INTEGER PRIMARY KEY, link TEXT, title TEXT );");
+        s.execute("CREATE TABLE IF NOT EXISTS Books ( id INTEGER PRIMARY KEY, link TEXT, title TEXT );");
         sqliteDb = new SqliteBookDao("test.db");
     }
 
@@ -63,7 +63,10 @@ public class SqliteBookDaoTest {
     }
 
     @After
-    public void deleteFile() {
+    public void deleteFile() throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+        Statement s = conn.createStatement();
+        s.execute("DROP TABLE Books;");
         File db = new File("test.db");
         db.delete();
     }
