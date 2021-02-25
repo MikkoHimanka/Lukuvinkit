@@ -5,13 +5,21 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
     implementation 'junit:junit:4.12'
+    testImplementation 'io.cucumber:cucumber-java:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit:6.8.1'
     testImplementation 'junit:junit:4.13'
     compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
 }
 
 application {
@@ -27,3 +35,4 @@ jar {
         attributes 'Main-Class': 'Main'
     }
 }
+
