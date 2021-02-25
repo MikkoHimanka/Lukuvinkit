@@ -1,8 +1,11 @@
+
 import domain.Book;
 import java.util.List;
 import dao.BookDao;
 import io.IO;
+
 public class App {
+
     private BookDao dao;
     private IO io;
 
@@ -13,43 +16,70 @@ public class App {
 
     public void listAll() {
         List<Book> books = dao.getAll();
-        io.print("Found " + books.size() + " books:");
-        io.print("****");
-        for(int i = 0; i < books.size(); ++i) {
-            printBook(books.get(i));
+        if (books.size() == 0) {
+            io.print("Lukuvinkkejä ei löytynyt.");
+        } else {
+            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
             io.print("****");
+            for (int i = 0; i < books.size(); ++i) {
+                printBook(books.get(i));
+                io.print("****");
+            }
         }
     }
 
     private void printBook(Book book) {
-        io.print("Link: " + book.getLink());
-        io.print("Title: " + book.getTitle());
+        io.print("Linkki: " + book.getLink());
+        io.print("Otsikko: " + book.getTitle());
     }
 
     public void createBook() {
-        io.print("Add link:");
+        io.print("Lisää linkki:");
         String link = io.getInput();
-        io.print("Add title:");
+        if (link.isEmpty()) {
+            io.print("Lukuvinkin lisäys ei onnistunut!");
+            io.print("Linkki ei voi olla tyhjä.");
+            return;
+        }
+        io.print("Lisää otsikko:");
         String title = io.getInput();
 
         Book result = dao.create(new Book(link, title));
         if (result != null) {
-            io.print("Book added successfully!");
+            io.print("Lukuvinkki lisätty onnistuneesti");
         } else {
-            io.print("There was a problem adding a book!");
+            io.print("Lukuvinkin lisäys ei onnistunut!");
         }
     }
 
     public void switchContext() {
-        io.print("What do you want to do? (A)dd a new book / (L)ist all books");
-        String selection = io.getInput().toLowerCase();
-        switch (selection) {
-            case "a":   createBook();
-                        break;
-            case "l":   listAll();
-                        break;
-            default:    io.print("ERROR: selection not valid!");
-                        break;
+        io.print("Tervetuloa Lukuvinkit-sovellukseen!\n");
+        loop:
+        while (true) {
+            switchMessage();
+            String selection = io.getInput().toLowerCase();
+            switch (selection) {
+                case "l":
+                    createBook();
+                    break;
+                case "n":
+                    listAll();
+                    break;
+                case "s":
+                    io.print("Kiitos käynnistä, sovellus sulkeutuu.");
+                    break loop;
+                default:
+                    io.print("Virhe: komento oli puutteellinen!");
+                    break;
+            }
         }
+
+    }
+
+    public void switchMessage() {
+        io.print("Komennot:");
+        io.print("(L)isää uusi lukuvinkki");
+        io.print("(N)äytä tallennetut lukuvinkit");
+        io.print("(S)ulje sovellus");
     }
 }
