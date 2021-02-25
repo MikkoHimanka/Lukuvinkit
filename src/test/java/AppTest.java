@@ -38,8 +38,8 @@ public class AppTest {
         System.out.println(app);
         app.listAll();
         List<String> out = io.getPrints();
-        assertEquals(out.get(0), "Found 0 books:");
-        assertEquals(out.get(1), "****");
+        assertEquals(out.get(0), "Lukuvinkkejä ei löytynyt.");
+		assertEquals(out.size(), 1);
     }
 
     @Test
@@ -49,13 +49,15 @@ public class AppTest {
         App app = new App(sqliteDb, io);
         app.listAll();
         List<String> out = io.getPrints();
-        assertEquals(out.get(0), "Found 2 books:");
+        assertEquals(out.get(0), "Löytyi 2 lukuvinkkiä:");
         assertEquals(out.get(1), "****");
-        assertEquals(out.get(2), "Link: link");
-        assertEquals(out.get(3), "Title: title");
+        assertEquals(out.get(2), "Linkki: link");
+        assertEquals(out.get(3), "Otsikko: title");
         assertEquals(out.get(4), "****");
-        assertEquals(out.get(5), "Link: www.google.com");
-        assertEquals(out.get(6), "Title: haku");
+        assertEquals(out.get(5), "Linkki: www.google.com");
+        assertEquals(out.get(6), "Otsikko: haku");
+        assertEquals(out.get(7), "****");
+		assertEquals(out.size(), 8);
     }
 
     @After
