@@ -35,7 +35,6 @@ public class AppTest {
     @Test
     public void testListAllEmpty() {
         App app = new App(sqliteDb, io);
-        System.out.println(app);
         app.listAll();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Lukuvinkkejä ei löytynyt.");
@@ -58,6 +57,52 @@ public class AppTest {
         assertEquals(out.get(6), "Otsikko: haku");
         assertEquals(out.get(7), "****");
 		assertEquals(out.size(), 8);
+    }
+
+    @Test
+    public void testSwichContextWelcomeAndExit() {
+        io.addInput("s");
+        App app = new App(sqliteDb, io);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(1), "Komennot:");
+        assertEquals(out.get(2), "(L)isää uusi lukuvinkki");
+        assertEquals(out.get(3), "(N)äytä tallennetut lukuvinkit");
+        assertEquals(out.get(4), "(S)ulje sovellus");
+        assertEquals(out.get(5), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 6);
+    }
+
+    @Test
+    public void testSwichContextListAllAndExit() {
+        io.addInput("n");
+        io.addInput("s");
+        App app = new App(sqliteDb, io);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(1), "Komennot:");
+        assertEquals(out.get(2), "(L)isää uusi lukuvinkki");
+        assertEquals(out.get(3), "(N)äytä tallennetut lukuvinkit");
+        assertEquals(out.get(4), "(S)ulje sovellus");
+        assertEquals(out.get(5), "Lukuvinkkejä ei löytynyt.");
+        assertEquals(out.get(6), "Komennot:");
+        assertEquals(out.get(7), "(L)isää uusi lukuvinkki");
+        assertEquals(out.get(8), "(N)äytä tallennetut lukuvinkit");
+        assertEquals(out.get(9), "(S)ulje sovellus");
+        assertEquals(out.get(10), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 11);
+    }
+
+    @Test
+    public void testSwichContextFailedCommand() {
+        io.addInput("lol");
+        io.addInput("s");
+        App app = new App(sqliteDb, io);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertEquals(out.get(5), "Virhe: komento oli puutteellinen!");
     }
 
     @After
