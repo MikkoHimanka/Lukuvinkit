@@ -2,6 +2,9 @@ package dao;
 
 import domain.Book;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -17,6 +20,13 @@ public class SqliteBookDao implements BookDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getSchema() {
+        try {
+            return Files.readString(Path.of("schema.sql"));
+        } catch (Exception ignored) { }
+        return null;
     }
 
     @Override
@@ -53,9 +63,9 @@ public class SqliteBookDao implements BookDao {
     private void createTable() {
         try {
             Statement statement = this.db.createStatement();
-            statement.execute("CREATE TABLE IF NOT EXISTS Books (id INT PRIMARY KEY, link TEXT, title TEXT)");
-        } catch (Exception e) {
-            e.printStackTrace();
+            statement.execute(getSchema());
+        } catch (Exception ignored) {
+            // error if table already exists
         }
     }
 }

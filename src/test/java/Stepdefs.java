@@ -28,9 +28,6 @@ public class Stepdefs {
     
     @Given("tietokanta on alustettu")
     public void commandAddIsSelected() throws SQLException {
-        Connection db = DriverManager.getConnection("jdbc:sqlite:test.db");
-        Statement s = db.createStatement();
-        s.execute("CREATE TABLE IF NOT EXISTS Books ( id INTEGER PRIMARY KEY, link TEXT, title TEXT );");
         sqliteDb = new SqliteBookDao("test.db");
     }
     
@@ -57,6 +54,7 @@ public class Stepdefs {
         Statement s = conn.createStatement();
         s.execute("DROP TABLE Books;");
         conn.close();
+        System.out.println("here");
         File db = new File("test.db");
         db.delete();
     }

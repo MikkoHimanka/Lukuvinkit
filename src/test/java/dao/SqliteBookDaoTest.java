@@ -20,9 +20,6 @@ public class SqliteBookDaoTest {
 
     @Before
     public void initDb() throws SQLException {
-        Connection db = DriverManager.getConnection("jdbc:sqlite:test.db");
-        Statement s = db.createStatement();
-        s.execute("CREATE TABLE IF NOT EXISTS Books ( id INTEGER PRIMARY KEY, link TEXT, title TEXT );");
         sqliteDb = new SqliteBookDao("test.db");
     }
 
