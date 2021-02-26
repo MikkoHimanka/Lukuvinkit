@@ -2,11 +2,13 @@ package dao;
 
 import domain.Book;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.util.stream.Stream;
 
 public class SqliteBookDao implements BookDao {
 
@@ -23,7 +25,11 @@ public class SqliteBookDao implements BookDao {
 
     public static String getSchema() {
         try {
-            return Files.readString(Paths.get("schema.sql"));
+            // Java 8 problems
+            StringBuilder schema = new StringBuilder();
+            Stream<String> stream = Files.lines(Paths.get("schema.sql"), StandardCharsets.UTF_8);
+            stream.forEach(s -> schema.append(" " + s));
+            return schema.toString();
         } catch (Exception ignored) { }
         return null;
     }
