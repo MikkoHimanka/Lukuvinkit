@@ -37,10 +37,18 @@ public class SqliteBookDao implements BookDao {
     @Override
     public Book create(Book book) {
         try {
-            PreparedStatement p = this.db.prepareStatement("INSERT INTO Books (link, title) VALUES (?, ?)");
+            Statement s = this.db.createStatement();
+            PreparedStatement p = this.db.prepareStatement("INSERT INTO Books (link, title, markedRead) VALUES (?, ?, 0)");
             p.setString(1, book.getLink());
             p.setString(2, book.getTitle());
             p.execute();
+
+            // Retrieve book id
+            ResultSet r = s.executeQuery("SELECT last_insert_rowid()");
+
+            r.next();
+            book.setId(r.getInt(1));
+
             return book;
         } catch (Exception e) {
             return null;
@@ -48,10 +56,38 @@ public class SqliteBookDao implements BookDao {
     }
 
     @Override
+    public Book setRead(Book book) {
+        try {
+            PreparedStatement p = this.db.prepareStatement("UPDATE Books SET markedRead=1 WHERE id=?");
+            p.setString(1, String.valueOf(book.getId()));
+            p.execute();
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    @Override
     public List<Book> getAll() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT link, title FROM Books");
+            ResultSet r = s.executeQuery("SELECT id, link, title FROM Books");
+
+            List<Book> books = new ArrayList<>();
+
+            while (r.next()) {
+                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
+            }
+
+            return books;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Book> getUnread() {
+        try {
+            Statement s = this.db.createStatement();
+            ResultSet r = s.executeQuery("SELECT link, title FROM Books WHERE markedRead=0");
 
             List<Book> books = new ArrayList<>();
 
@@ -69,8 +105,6 @@ public class SqliteBookDao implements BookDao {
         try {
             Statement statement = this.db.createStatement();
             statement.execute(getSchema());
-        } catch (Exception ignored) {
-            // error if table already exists
-        }
+        } catch (Exception ignored) { }
     }
 }

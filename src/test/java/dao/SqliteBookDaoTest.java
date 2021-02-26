@@ -59,6 +59,41 @@ public class SqliteBookDaoTest {
         assertEquals(books.get(1).getTitle(), "title2");
     }
 
+    @Test
+    public void testDatabaseId() {
+
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.size(), 0);
+
+        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link2", "title2"));
+
+        books = sqliteDb.getAll();
+
+        assertEquals(books.get(0).getId(), 1);
+        assertEquals(books.get(1).getId(), 2);
+    }
+
+    @Test
+    public void testMarking() {
+        Book b = new Book("link", "title");
+        sqliteDb.create(b);
+        sqliteDb.setRead(b);
+
+        List<Book> unread = sqliteDb.getUnread();
+        assertEquals(unread.size(), 0);
+    }
+
+    @Test
+    public void testListingUnread() {
+        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link2", "title2"));
+
+        List<Book> books = sqliteDb.getUnread();
+
+        assertEquals(books.size(), 2);
+    }
+
     @After
     public void deleteFile() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
