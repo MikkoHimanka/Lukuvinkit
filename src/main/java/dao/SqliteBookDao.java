@@ -2,9 +2,8 @@ package dao;
 
 import domain.Book;
 
-import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -24,7 +23,7 @@ public class SqliteBookDao implements BookDao {
 
     public static String getSchema() {
         try {
-            return Files.readString(Path.of("schema.sql"));
+            return Files.readString(Paths.get("schema.sql"));
         } catch (Exception ignored) { }
         return null;
     }
