@@ -41,7 +41,7 @@ N
 ```
 Painamalla N käyttäjä voi listata kaikki sovellukseen tallennetut lukuvinkit.
 
-## Sovelluksen sulkeminen
+## Ohjelman sulkeminen
 ```
 S
 ```
