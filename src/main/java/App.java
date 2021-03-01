@@ -16,6 +16,15 @@ public class App {
 
     public void listAll() {
         List<Book> books = dao.getAll();
+        printBooks(books);
+    }
+
+    public void listByTitle(String title) {
+        List<Book> books = dao.findByTitle(title);
+        printBooks(books);
+    }
+
+    private void printBooks(List<Book> books) {
         if (books.size() == 0) {
             io.print("Lukuvinkkejä ei löytynyt.");
         } else {
@@ -55,6 +64,18 @@ public class App {
         }
     }
 
+    public void findByTitle() {
+        io.print("Etsi lukuvinkkejä otsikon perusteella");
+        io.print("Anna hakuparametri");
+        String title = io.getInput();
+        if (title.isEmpty()) {
+            io.print("Haku ei onnistunut!");
+            io.print("Hakuparametri ei voi olla tyhjä");
+            return;
+        }
+        listByTitle(title);
+    }
+
     public void switchContext() {
         io.print("Tervetuloa Lukuvinkit-sovellukseen!\n");
         loop:
@@ -71,6 +92,9 @@ public class App {
                 case "s":
                     io.print("Kiitos käynnistä, sovellus sulkeutuu.");
                     break loop;
+                case "e":
+                    findByTitle();
+                    break;
                 default:
                     io.print("Virhe: komento oli puutteellinen!");
                     break;
@@ -83,6 +107,7 @@ public class App {
         io.print("Komennot:");
         io.print("(L)isää uusi lukuvinkki");
         io.print("(N)äytä tallennetut lukuvinkit");
+        io.print("(E)tsi lukuvinkkejä");
         io.print("(S)ulje sovellus");
     }
 }

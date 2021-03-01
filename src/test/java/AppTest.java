@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -66,9 +67,10 @@ public class AppTest {
         assertEquals(out.get(1), "Komennot:");
         assertEquals(out.get(2), "(L)isää uusi lukuvinkki");
         assertEquals(out.get(3), "(N)äytä tallennetut lukuvinkit");
-        assertEquals(out.get(4), "(S)ulje sovellus");
-        assertEquals(out.get(5), "Kiitos käynnistä, sovellus sulkeutuu.");
-        assertEquals(out.size(), 6);
+        assertEquals(out.get(4), "(E)tsi lukuvinkkejä");
+        assertEquals(out.get(5), "(S)ulje sovellus");
+        assertEquals(out.get(6), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 7);
     }
 
     @Test
@@ -82,14 +84,16 @@ public class AppTest {
         assertEquals(out.get(1), "Komennot:");
         assertEquals(out.get(2), "(L)isää uusi lukuvinkki");
         assertEquals(out.get(3), "(N)äytä tallennetut lukuvinkit");
-        assertEquals(out.get(4), "(S)ulje sovellus");
-        assertEquals(out.get(5), "Lukuvinkkejä ei löytynyt.");
-        assertEquals(out.get(6), "Komennot:");
-        assertEquals(out.get(7), "(L)isää uusi lukuvinkki");
-        assertEquals(out.get(8), "(N)äytä tallennetut lukuvinkit");
-        assertEquals(out.get(9), "(S)ulje sovellus");
-        assertEquals(out.get(10), "Kiitos käynnistä, sovellus sulkeutuu.");
-        assertEquals(out.size(), 11);
+        assertEquals(out.get(4), "(E)tsi lukuvinkkejä");
+        assertEquals(out.get(5), "(S)ulje sovellus");
+        assertEquals(out.get(6), "Lukuvinkkejä ei löytynyt.");
+        assertEquals(out.get(7), "Komennot:");
+        assertEquals(out.get(8), "(L)isää uusi lukuvinkki");
+        assertEquals(out.get(9), "(N)äytä tallennetut lukuvinkit");
+        assertEquals(out.get(10), "(E)tsi lukuvinkkejä");
+        assertEquals(out.get(11), "(S)ulje sovellus");
+        assertEquals(out.get(12), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 13);
     }
 
     @Test
@@ -99,7 +103,33 @@ public class AppTest {
         App app = new App(sqliteDb, io);
         app.switchContext();
         List<String> out = io.getPrints();
-        assertEquals(out.get(5), "Virhe: komento oli puutteellinen!");
+        assertEquals(out.get(6), "Virhe: komento oli puutteellinen!");
+    }
+
+    @Test
+    public void testFindByTitleFindsBooksWithKeyword() {
+        sqliteDb.create(new Book("link", "title"));
+        App app = new App(sqliteDb, io);
+        io.addInput("itl");
+        app.findByTitle();
+        io.getInput();
+        io.getInput();
+        List<String> out = io.getPrints();
+
+        assertEquals(out.get(5), "Otsikko: title");
+    }
+
+    @Test
+    public void testFindByTitleDoesntFindBooksWithBadKeyword() {
+        sqliteDb.create(new Book("link", "title"));
+        App app = new App(sqliteDb, io);
+        io.addInput("lepakko");
+        app.findByTitle();
+        io.getInput();
+        io.getInput();
+        List<String> out = io.getPrints();
+
+        assertEquals(out.get(2), "Lukuvinkkejä ei löytynyt.");
     }
 
     @After
