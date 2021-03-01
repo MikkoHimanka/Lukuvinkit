@@ -31,9 +31,9 @@ public class App {
     
     private void printBooks(List<Book> books) {
         if (books.isEmpty()) {
-            io.print("Lukuvinkkej‰ ei lˆytynyt.");
+            io.print("Lukuvinkkej√§ ei l√∂ytynyt.");
         } else {
-            io.print("Lˆytyi " + books.size() + " lukuvinkki‰:");
+            io.print("L√∂ytyi " + books.size() + " lukuvinkki√§:");
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
                 printBook(books.get(i));
@@ -51,26 +51,26 @@ public class App {
     }
 
     public void createBook() {
-        io.print("Lis‰‰ linkki: (pakollinen)");
+        io.print("Lis√§√§ linkki: (pakollinen)");
         String link = io.getInput();
         if (link.isEmpty()) {
             io.print("Lukuvinkin lis√§ys ei onnistunut!");
             io.print("Linkki ei voi olla tyhj√§.");
             return;
         }
-        io.print("Lis‰‰ otsikko:");
+        io.print("Lis√§√§ otsikko:");
         String title = io.getInput();
 
         Book result = dao.create(new Book(link, title));
         if (result != null) {
-            io.print("Lukuvinkki lis‰tty onnistuneesti");
+            io.print("Lukuvinkki lis√§tty onnistuneesti");
         } else {
-            io.print("Lukuvinkin lis‰ys ei onnistunut!");
+            io.print("Lukuvinkin lis√§ys ei onnistunut!");
         }
     }
     
     public void markAsRead() {
-        io.print("Luetuksi merkitt‰‰n lukuvinkin linkki: ");
+        io.print("Luetuksi merkitt√§√§n lukuvinkin linkki: ");
         String link = io.getInput();
         List<Book> bookList = dao.getUnread();
         for (Book book : bookList) {
@@ -84,12 +84,12 @@ public class App {
     }
 
     public void findByTitle() {
-        io.print("Etsi lukuvinkkej‰ otsikon perusteella");
+        io.print("Etsi lukuvinkkej√§ otsikon perusteella");
         io.print("Anna hakuparametri");
         String title = io.getInput();
         if (title.isEmpty()) {
             io.print("Haku ei onnistunut!");
-            io.print("Hakuparametri ei voi olla tyhj‰");
+            io.print("Hakuparametri ei voi olla tyhj√§");
             return;
         }
         listByTitle(title);
@@ -115,7 +115,7 @@ public class App {
                     listAllUnread();
                     break;
                 case "s":
-                    io.print("Kiitos k‰ynnist‰, sovellus sulkeutuu.");
+                    io.print("Kiitos k√§ynnist√§, sovellus sulkeutuu.");
                     break loop;
                 case "e":
                     findByTitle();
@@ -130,11 +130,11 @@ public class App {
 
     public void switchMessage() {
         io.print("Komennot:");
-        io.print("(L)is‰‰ uusi lukuvinkki");
-        io.print("(N)‰yt‰ tallennetut lukuvinkit");
+        io.print("(L)is√§√§ uusi lukuvinkki");
+        io.print("(N)√§yt√§ tallennetut lukuvinkit");
         io.print("(M)erkitse lukuvinkki luetuksi");
         io.print("(Li)staa lukemattomat lukuvinkit");
-        io.print("(E)tsi lukuvinkkej‰");
+        io.print("(E)tsi lukuvinkkej√§");
         io.print("(S)ulje sovellus");
     }
 }
