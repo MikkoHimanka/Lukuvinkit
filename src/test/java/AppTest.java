@@ -34,7 +34,7 @@ public class AppTest {
         App app = new App(sqliteDb, io);
         app.listAll();
         List<String> out = io.getPrints();
-        assertEquals(out.get(0), "Lukuvinkkej‰ ei lˆytynyt.");
+        assertEquals(out.get(0), "Lukuvinkkej√§ ei l√∂ytynyt.");
 	assertEquals(out.size(), 1);
     }
     
@@ -45,7 +45,7 @@ public class AppTest {
         App app = new App(sqliteDb, io);
         app.listAll();
         List<String> out = io.getPrints();
-        assertEquals(out.get(0), "Lˆytyi 2 lukuvinkki‰:");
+        assertEquals(out.get(0), "L√∂ytyi 2 lukuvinkki√§:");
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: link");
         assertEquals(out.get(3), "Otsikko: title");
@@ -64,7 +64,7 @@ public class AppTest {
         App app = new App(sqliteDb, io);
         app.listAllUnread();
         List<String> out = io.getPrints();
-        assertEquals(out.get(0), "Lˆytyi 1 lukuvinkki‰:");
+        assertEquals(out.get(0), "L√∂ytyi 1 lukuvinkki√§:");
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: www.google.com");
         assertEquals(out.get(3), "Otsikko: haku");
@@ -80,13 +80,13 @@ public class AppTest {
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
         assertEquals(out.get(1), "Komennot:");
-        assertEquals(out.get(2), "(L)is‰‰ uusi lukuvinkki");
-        assertEquals(out.get(3), "(N)‰yt‰ tallennetut lukuvinkit");
+        assertEquals(out.get(2), "(L)is√§√§ uusi lukuvinkki");
+        assertEquals(out.get(3), "(N)√§yt√§ tallennetut lukuvinkit");
         assertEquals(out.get(4), "(M)erkitse lukuvinkki luetuksi");
         assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(6), "(E)tsi lukuvinkkej‰");
+        assertEquals(out.get(6), "(E)tsi lukuvinkkej√§");
         assertEquals(out.get(7), "(S)ulje sovellus");
-        assertEquals(out.get(8), "Kiitos k‰ynnist‰, sovellus sulkeutuu.");
+        assertEquals(out.get(8), "Kiitos k√§ynnist√§, sovellus sulkeutuu.");
         assertEquals(out.size(), 9);
     }
 
@@ -99,21 +99,21 @@ public class AppTest {
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
         assertEquals(out.get(1), "Komennot:");
-        assertEquals(out.get(2), "(L)is‰‰ uusi lukuvinkki");
-        assertEquals(out.get(3), "(N)‰yt‰ tallennetut lukuvinkit");
+        assertEquals(out.get(2), "(L)is√§√§ uusi lukuvinkki");
+        assertEquals(out.get(3), "(N)√§yt√§ tallennetut lukuvinkit");
         assertEquals(out.get(4), "(M)erkitse lukuvinkki luetuksi");
         assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(6), "(E)tsi lukuvinkkej‰");
+        assertEquals(out.get(6), "(E)tsi lukuvinkkej√§");
         assertEquals(out.get(7), "(S)ulje sovellus");
-        assertEquals(out.get(8), "Lukuvinkkej‰ ei lˆytynyt.");
+        assertEquals(out.get(8), "Lukuvinkkej√§ ei l√∂ytynyt.");
         assertEquals(out.get(9), "Komennot:");
-        assertEquals(out.get(10), "(L)is‰‰ uusi lukuvinkki");
-        assertEquals(out.get(11), "(N)‰yt‰ tallennetut lukuvinkit");
+        assertEquals(out.get(10), "(L)is√§√§ uusi lukuvinkki");
+        assertEquals(out.get(11), "(N)√§yt√§ tallennetut lukuvinkit");
         assertEquals(out.get(12), "(M)erkitse lukuvinkki luetuksi");
         assertEquals(out.get(13), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(14), "(E)tsi lukuvinkkej‰");
+        assertEquals(out.get(14), "(E)tsi lukuvinkkej√§");
         assertEquals(out.get(15), "(S)ulje sovellus");
-        assertEquals(out.get(16), "Kiitos k‰ynnist‰, sovellus sulkeutuu.");
+        assertEquals(out.get(16), "Kiitos k√§ynnist√§, sovellus sulkeutuu.");
         assertEquals(out.size(), 17);
     }
 
@@ -150,7 +150,7 @@ public class AppTest {
         io.getInput();
         List<String> out = io.getPrints();
 
-        assertEquals(out.get(2), "Lukuvinkkej‰ ei lˆytynyt.");
+        assertEquals(out.get(2), "Lukuvinkkej√§ ei l√∂ytynyt.");
     }
 
     @After
@@ -163,4 +163,5 @@ public class AppTest {
         db.delete();
     }
 }
+
 
