@@ -107,4 +107,24 @@ public class SqliteBookDao implements BookDao {
             statement.execute(getSchema());
         } catch (Exception ignored) { }
     }
+    
+    @Override
+    public List<Book> findByTitle(String title) {
+        try {
+            PreparedStatement p = this.db.prepareStatement("SELECT id, link, title FROM Books WHERE title LIKE ?");
+            p.setString(1, "%" + title + "%");
+            ResultSet r = p.executeQuery();
+
+            List<Book> books = new ArrayList<>();
+
+            while (r.next()) {
+                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
+            }
+
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

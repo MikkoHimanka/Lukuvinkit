@@ -41,7 +41,7 @@ public class Stepdefs {
     @Then("lukuvinkki on lisatty listalle")
     public void bookIsAddedToList() throws SQLException {
         List<String> out = ioStub.getPrints();
-        assertEquals(out.get(0), "LÃ¶ytyi 3 lukuvinkkiÃ¤:");
+        assertEquals(out.get(0), "Löytyi 3 lukuvinkkiä:");
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: www.google.com");
         assertEquals(out.get(3), "****");
@@ -64,7 +64,7 @@ public class Stepdefs {
     @Then("lukuvinkki on merkitty luetuksi")
     public void linkIsMarkedAsRead() throws SQLException {
         List<String> out = ioStub.getPrints();
-        assertEquals(out.get(0), "LÃ¶ytyi 1 lukuvinkkiÃ¤:");
+        assertEquals(out.get(0), "Löytyi 1 lukuvinkkiä:");
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: www.bing.com");
         assertEquals(out.get(3), "****");

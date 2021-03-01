@@ -9,4 +9,5 @@ public interface BookDao {
     Book setRead(Book book);
     List<Book> getAll();
     List<Book> getUnread();
+    List<Book> findByTitle(String title);
 }
