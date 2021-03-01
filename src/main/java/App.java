@@ -37,7 +37,7 @@ public class App {
     }
 
     public void createBook() {
-        io.print("Lisää linkki:");
+        io.print("Lisää linkki: (pakollinen)");
         String link = io.getInput();
         if (link.isEmpty()) {
             io.print("Lukuvinkin lisäys ei onnistunut!");
