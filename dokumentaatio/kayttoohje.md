@@ -26,6 +26,8 @@ Ohjelmaaa käytetään tekstikäyttöliittymän kautta. Käynnistyessään ohjel
 ```
 (L)isää uusi lukuvinkki
 (N)äytä tallennetut lukuvinkit
+(M)erkitse lukuvinkki luetuksi
+(Li)staa lukemattomat lukuvinkit
 (E)tsi lukuvinkkejä
 (S)ulje sovellus
 ```
@@ -41,6 +43,20 @@ Painamalla L käyttäjä voi tallentaa uuden lukuvinkin. Sovellus pyytää käyt
 N
 ```
 Painamalla N käyttäjä voi listata kaikki sovellukseen tallennetut lukuvinkit.
+
+
+## Lukuvinkin merkitseminen
+```
+M
+```
+Painamalla M käyttäjä voi merkitä lukuvinkin luetuksi linkin mukaan.
+
+
+## Merkitsemättömien lukuvinkkien näyttäminen
+```
+Li
+```
+Painamalla Li käyttäjä voi listata kaikki sovellukseen tallennetut merkitsemättömät lukuvinkit.
 
 ## Lukuvinkkien etsiminen
 ````
