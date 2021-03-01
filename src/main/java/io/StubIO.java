@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StubIO implements IO {
-    private ArrayList<String> prints;
-    private ArrayList<String> inputs;
+    private final ArrayList<String> prints;
+    private final ArrayList<String> inputs;
 
     public StubIO() {
         prints = new ArrayList<>();
@@ -19,6 +19,7 @@ public class StubIO implements IO {
         this.inputs.addAll(inputs);
     }
 
+    @Override
     public void print(String s) {
         prints.add(s);
     }
@@ -27,6 +28,7 @@ public class StubIO implements IO {
         return prints;
     }
 
+    @Override
     public String getInput() {
         if (inputs.size() > 0) {
             return inputs.remove(0);

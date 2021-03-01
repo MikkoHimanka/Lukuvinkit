@@ -1,5 +1,4 @@
 import dao.SqliteBookDao;
-import domain.Book;
 import io.ConsoleIO;
 
 public class Main {

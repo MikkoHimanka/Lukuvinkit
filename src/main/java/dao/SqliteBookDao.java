@@ -87,12 +87,12 @@ public class SqliteBookDao implements BookDao {
     public List<Book> getUnread() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT link, title FROM Books WHERE markedRead=0");
+            ResultSet r = s.executeQuery("SELECT id, link, title FROM Books WHERE markedRead=0");
 
             List<Book> books = new ArrayList<>();
 
             while (r.next()) {
-                books.add(new Book(r.getString("link"), r.getString("title")));
+                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
             }
 
             return books;

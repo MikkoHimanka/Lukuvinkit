@@ -6,17 +6,16 @@ import io.IO;
 
 public class App {
 
-    private BookDao dao;
-    private IO io;
+    private final BookDao dao;
+    private final IO io;
 
     public App(BookDao dao, IO io) {
         this.dao = dao;
         this.io = io;
     }
-
-    public void listAll() {
-        List<Book> books = dao.getAll();
-        if (books.size() == 0) {
+    
+    public void listBook(List<Book> books) {
+        if (books.isEmpty()) {
             io.print("Lukuvinkkejä ei löytynyt.");
         } else {
             io.print("Löytyi " + books.size() + " lukuvinkkiä:");
@@ -26,6 +25,14 @@ public class App {
                 io.print("****");
             }
         }
+    }
+    
+    public void listAllUnread() {
+        listBook(dao.getUnread());
+    }
+
+    public void listAll() {
+        listBook(dao.getAll());
     }
 
     private void printBook(Book book) {
@@ -54,6 +61,20 @@ public class App {
             io.print("Lukuvinkin lisäys ei onnistunut!");
         }
     }
+    
+    public void markAsRead() {
+        io.print("Luetuksi merkittävän lukuvinkin linkki: ");
+        String link = io.getInput();
+        List<Book> bookList = dao.getUnread();
+        for (Book book : bookList) {
+            if (book.getLink().equals(link)) {
+                dao.setRead(book);
+                io.print("Lukuvinkki merkitty luetuksi");
+                return;
+            }
+        }
+        io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
+    }
 
     public void switchContext() {
         io.print("Tervetuloa Lukuvinkit-sovellukseen!\n");
@@ -67,6 +88,12 @@ public class App {
                     break;
                 case "n":
                     listAll();
+                    break;
+                case "m":
+                    markAsRead();
+                    break;
+                case "li":
+                    listAllUnread();
                     break;
                 case "s":
                     io.print("Kiitos käynnistä, sovellus sulkeutuu.");
@@ -83,6 +110,8 @@ public class App {
         io.print("Komennot:");
         io.print("(L)isää uusi lukuvinkki");
         io.print("(N)äytä tallennetut lukuvinkit");
+        io.print("(M)erkitse lukuvinkki luetuksi");
+        io.print("(Li)staa lukemattomat lukuvinkit");
         io.print("(S)ulje sovellus");
     }
 }
