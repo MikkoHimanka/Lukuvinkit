@@ -30,7 +30,10 @@ public class App {
 
     private void printBook(Book book) {
         io.print("Linkki: " + book.getLink());
-        io.print("Otsikko: " + book.getTitle());
+        if (!(book.getTitle().isEmpty())) {
+            io.print("Otsikko: " + book.getTitle());
+        }
+
     }
 
     public void createBook() {
