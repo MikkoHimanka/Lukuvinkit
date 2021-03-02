@@ -45,6 +45,20 @@ public class App {
         }
     }
 
+    private void printBooksWithNumbers(List<Book> books) {
+        if (books.isEmpty()) {
+            io.print("Lukuvinkkejä ei löytynyt.");
+        } else {
+            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
+            io.print("****");
+            for (int i = 0; i < books.size(); ++i) {
+                io.print("" + (i+1));
+                printBook(books.get(i));
+                io.print("****");
+            }
+        }
+    }
+
     private void printBook(Book book) {
         io.print("Linkki: " + book.getLink());
         if (!(book.getTitle().isEmpty())) {
@@ -114,6 +128,8 @@ public class App {
         String title = "";
         String url = "";
 
+        io.print(""+bookList.size());
+
         if (bookList.isEmpty()) {
             io.print("Lukuvinkkejä ei löytynyt.");
             return;
@@ -135,6 +151,14 @@ public class App {
         io.print("\n(V)alitse");
         io.print("(T)arkenna hakuehtojasi");
         io.print("Takaisin (P)äävalikkoon");
+
+        String input = io.getInput();
+
+        switch (input) {
+            case ("V"):
+                printBooksWithNumbers(bookList);
+                Integer number = Integer.parseInt(io.getInput());
+        }
         io.print(""+bookList.size());
 //        String link = io.getInput();
 //        for (Book book : bookList) {
