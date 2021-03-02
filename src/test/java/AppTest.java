@@ -1,5 +1,6 @@
 import dao.SqliteBookDao;
 import domain.Book;
+import domain.Search;
 import io.StubIO;
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +19,7 @@ public class AppTest {
 
     private SqliteBookDao sqliteDb;
     private StubIO io;
+    private Search search;
 
     @Before
     public void initDb() throws SQLException {
@@ -29,9 +31,14 @@ public class AppTest {
         io = new StubIO();
     }
 
+    @Before
+    public void initSearch() {
+        search = new Search(3.0);
+    }
+
     @Test
     public void testListAllEmpty() {
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.listAll();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Lukuvinkkejä ei löytynyt.");
@@ -42,7 +49,7 @@ public class AppTest {
     public void testListAllSimple() {
         sqliteDb.create(new Book("link", "title"));
         sqliteDb.create(new Book("www.google.com", "haku"));
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.listAll();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Löytyi 2 lukuvinkkiä:");
@@ -61,7 +68,7 @@ public class AppTest {
         sqliteDb.create(new Book("link", "title", 1));
         sqliteDb.create(new Book("www.google.com", "haku", 2));
         sqliteDb.setRead(new Book("link", "title", 1));
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.listAllUnread();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Löytyi 1 lukuvinkkiä:");
@@ -75,7 +82,7 @@ public class AppTest {
     @Test
     public void testSwichContextWelcomeAndExit() {
         io.addInput("s");
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
@@ -94,7 +101,7 @@ public class AppTest {
     public void testSwichContextListAllAndExit() {
         io.addInput("n");
         io.addInput("s");
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
@@ -121,7 +128,7 @@ public class AppTest {
     public void testSwichContextFailedCommand() {
         io.addInput("lol");
         io.addInput("s");
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(8), "Virhe: komento oli puutteellinen!");
@@ -130,7 +137,7 @@ public class AppTest {
     @Test
     public void testFindByTitleFindsBooksWithKeyword() {
         sqliteDb.create(new Book("link", "title"));
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         io.addInput("itl");
         app.findByTitle();
         io.getInput();
@@ -143,7 +150,7 @@ public class AppTest {
     @Test
     public void testFindByTitleDoesntFindBooksWithBadKeyword() {
         sqliteDb.create(new Book("link", "title"));
-        App app = new App(sqliteDb, io);
+        App app = new App(sqliteDb, io, search);
         io.addInput("lepakko");
         app.findByTitle();
         io.getInput();

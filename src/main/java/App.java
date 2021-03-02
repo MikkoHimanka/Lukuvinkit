@@ -2,16 +2,19 @@
 import domain.Book;
 import java.util.List;
 import dao.BookDao;
+import domain.Search;
 import io.IO;
 
 public class App {
 
     private final BookDao dao;
     private final IO io;
+    private final Search search;
 
-    public App(BookDao dao, IO io) {
+    public App(BookDao dao, IO io, Search search) {
         this.dao = dao;
         this.io = io;
+        this.search = search;
     }
 
     public void listAll() {
@@ -25,8 +28,11 @@ public class App {
     }
 
     public void listByTitle(String title) {
-        List<Book> books = dao.findByTitle(title);
-        printBooks(books);
+        List<Book> books = dao.getAll();
+
+        List<Book> matching = search.findBooksByTitle(title, books);
+
+        printBooks(matching);
     }
     
     private void printBooks(List<Book> books) {
@@ -120,6 +126,7 @@ public class App {
                 case "e":
                     findByTitle();
                     break;
+
                 default:
                     io.print("Virhe: komento oli puutteellinen!");
                     break;

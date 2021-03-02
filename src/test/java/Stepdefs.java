@@ -1,6 +1,7 @@
 
 import dao.SqliteBookDao;
 import domain.Book;
+import domain.Search;
 import io.StubIO;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -19,10 +20,12 @@ public class Stepdefs {
     App app;
     StubIO ioStub;
     SqliteBookDao sqliteDb;
+    Search search;
     
     @Before
     public void setup() {
         ioStub = new StubIO();
+        search = new Search(3.0);
     }
     
     @Given("tietokanta on alustettu")
@@ -34,7 +37,7 @@ public class Stepdefs {
     @When("linkki {string} ja otsikko {string} ovat annettu")
     public void validLinkAndTitleAreEntered(String link, String title) {
         sqliteDb.create(new Book(link, title));
-        app = new App(sqliteDb, ioStub);
+        app = new App(sqliteDb, ioStub, search);
         app.listAll();
     }
     
@@ -57,7 +60,7 @@ public class Stepdefs {
     @When("lukemattoman lukuvinkin linkki {string} on annettu")
     public void unreadBookIsGiven(String link) {
         sqliteDb.setRead(new Book(link, "", 1));
-        app = new App(sqliteDb, ioStub);
+        app = new App(sqliteDb, ioStub, search);
         app.listAllUnread();
     }
     
