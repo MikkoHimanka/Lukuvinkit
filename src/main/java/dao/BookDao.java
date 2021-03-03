@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BookDao {
     Book create(Book book);
-    Book setRead(Book book);
+    Boolean setRead(Book book);
     List<Book> getAll();
     List<Book> getUnread();
     List<Book> findByTitle(String title);

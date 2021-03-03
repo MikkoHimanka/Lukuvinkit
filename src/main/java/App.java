@@ -52,7 +52,7 @@ public class App {
             io.print("Löytyi " + books.size() + " lukuvinkkiä:");
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
-                io.print("" + (i+1));
+                io.print("(" + (i+1) + ")");
                 printBook(books.get(i));
                 io.print("****");
             }
@@ -146,6 +146,14 @@ public class App {
             return;
         }
 
+        if (bookList.size() == 1) {
+            if (dao.setRead(bookList.get(0))) {
+                io.print("Lukuvinkki merkitty luetuksi!");
+            } else {
+                io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
+            }
+        }
+
         io.print("Mikä lukuvinkki merkitään luetuksi?\n");
         printBooks(bookList);
         io.print("\n(V)alitse");
@@ -155,11 +163,19 @@ public class App {
         String input = io.getInput();
 
         switch (input) {
-            case ("V"):
+            case ("v"):
                 printBooksWithNumbers(bookList);
-                Integer number = Integer.parseInt(io.getInput());
+                input = io.getInput();
+                Integer number = Integer.parseInt(input);
+                if (number <= bookList.size() && number >= 0) {
+                    if (dao.setRead(bookList.get(number-1))) {
+                        io.print("Lukuvinkki merkitty luetuksi!");
+                    } else {
+                        io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
+                    }
+                }
         }
-        io.print(""+bookList.size());
+
 //        String link = io.getInput();
 //        for (Book book : bookList) {
 //            if (book.getLink().equals(link)) {
@@ -167,8 +183,6 @@ public class App {
 //                io.print("Lukuvinkki merkitty luetuksi");
 //                return;
 //            }
-//        }
-        io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
     }
 
     public void findByTitle() {

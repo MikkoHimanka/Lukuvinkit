@@ -56,13 +56,15 @@ public class SqliteBookDao implements BookDao {
     }
 
     @Override
-    public Book setRead(Book book) {
+    public Boolean setRead(Book book) {
         try {
             PreparedStatement p = this.db.prepareStatement("UPDATE Books SET markedRead=1 WHERE id=?");
             p.setString(1, String.valueOf(book.getId()));
             p.execute();
-        } catch (Exception ignored) {}
-        return null;
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     @Override
