@@ -88,8 +88,8 @@ public class App {
 
     private List<Book> filterBooks(List<Book> books, String title, String url) {
         return books.stream()
-                .filter(b -> b.getTitle().contains(title))
-                .filter(b -> b.getLink().contains(url))
+                .filter(b -> b.getTitle().toLowerCase().contains(title))
+                .filter(b -> b.getLink().toLowerCase().contains(url))
                 .collect(Collectors.toList());
     }
 
