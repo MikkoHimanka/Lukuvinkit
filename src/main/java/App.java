@@ -128,14 +128,11 @@ public class App {
         String title = "";
         String url = "";
 
-        io.print(""+bookList.size());
-
-        if (bookList.isEmpty()) {
+        if (bookList != null && bookList.isEmpty()) {
             io.print("Lukuvinkkejä ei löytynyt.");
             return;
         }
 
-        loop:
         while (true) {
             while (bookList.size() > 5) {
                 io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
@@ -170,7 +167,7 @@ public class App {
                         case ("v"):
                             io.print("Valitse lukuvinkin numero");
                             input = io.getInput();
-                            Integer number = -1;
+                            int number = -1;
                             try {
                                 number = Integer.parseInt(input);
                             } catch (Exception e) {
@@ -178,7 +175,7 @@ public class App {
                                 io.print("Paina (Enter)");
                                 io.getInput();
                             }
-                            if (number <= bookList.size() && number >= 0) {
+                            if (number <= bookList.size() && number > 0) {
                                 if (dao.setRead(bookList.get(number - 1))) {
                                     io.print("Lukuvinkki merkitty luetuksi!");
                                 } else {
