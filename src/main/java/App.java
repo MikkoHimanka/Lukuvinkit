@@ -58,36 +58,6 @@ public class App {
         }
     }
 
-    private List<Book> narrowingSearch(List<Book> books) {
-        String url = "";
-        String title = "";
-        loop:
-        while (true) {
-            io.print("Tarkenna hakuehtojasi:");
-            io.print("Tarkenna (L)inkki");
-            io.print("Tarkenna (O)tsikko");
-            io.print("Takaisin (P)äävalikkoon");
-            String input = io.getInput().toLowerCase();
-            switch (input) {
-                case ("l"):
-                    io.print("Anna hakuparametri:");
-                    url = io.getInput().toLowerCase();
-                    break loop;
-                case ("o"):
-                    io.print("Anna hakuparametri:");
-                    title = io.getInput().toLowerCase();
-                    break loop;
-                case ("p"):
-                    return null;
-                default:
-                    io.print("Virhe: komento oli puutteellinen!");
-                    break;
-            }
-        }
-        books = BookList.filterBooks(books, title, url);
-        return books;
-    }
-
     public void markAsRead() {
         List<Book> bookList = dao.getUnread();
         String title = "";
@@ -102,7 +72,7 @@ public class App {
             while (bookList.size() > 5) {
                 io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
 
-                bookList = narrowingSearch(bookList);
+                bookList = BookList.narrowingSearch(bookList, io);
 
                 if (bookList == null) {
                     return;
@@ -131,27 +101,16 @@ public class App {
                     String input = io.getInput();
                     switch (input) {
                         case ("v"):
-                            io.print("Valitse lukuvinkin numero");
-                            input = io.getInput();
-                            int number = -1;
-                            try {
-                                number = Integer.parseInt(input);
-                            } catch (Exception e) {
-                                io.print("Valinnan pitää olla numero!");
-                                io.print("Paina (Enter)");
-                                io.getInput();
-                            }
-                            if (number <= bookList.size() && number > 0) {
-                                if (dao.setRead(bookList.get(number - 1))) {
-                                    io.print("Lukuvinkki merkitty luetuksi!");
-                                } else {
-                                    io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
-                                }
+                            Book toBeMarked = BookList.choose(bookList, io);
+                            if (dao.setRead(toBeMarked)) {
+                                io.print("Lukuvinkki merkitty luetuksi!");
                                 return;
+                            } else {
+                                io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
                             }
                             break;
                         case ("t"):
-                            bookList = narrowingSearch(bookList);
+                            bookList = BookList.narrowingSearch(bookList, io);
                             break;
                         case ("p"):
                             return;
