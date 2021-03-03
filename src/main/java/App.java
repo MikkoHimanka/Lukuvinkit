@@ -135,54 +135,69 @@ public class App {
             return;
         }
 
-        while (bookList.size() > 5) {
-            io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
+        loop:
+        while (true) {
+            while (bookList.size() > 5) {
+                io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
 
-            bookList = narrowingSearch(bookList);
-        }
+                bookList = narrowingSearch(bookList);
 
-        if (bookList.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt annetulla haulla.");
-            return;
-        }
-
-        if (bookList.size() == 1) {
-            if (dao.setRead(bookList.get(0))) {
-                io.print("Lukuvinkki merkitty luetuksi!");
-            } else {
-                io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
+                if (bookList == null) {
+                    return;
+                }
             }
-        }
 
-        io.print("Mikä lukuvinkki merkitään luetuksi?\n");
-        printBooks(bookList);
-        io.print("\n(V)alitse");
-        io.print("(T)arkenna hakuehtojasi");
-        io.print("Takaisin (P)äävalikkoon");
-
-        String input = io.getInput();
-
-        switch (input) {
-            case ("v"):
-                printBooksWithNumbers(bookList);
-                input = io.getInput();
-                Integer number = Integer.parseInt(input);
-                if (number <= bookList.size() && number >= 0) {
-                    if (dao.setRead(bookList.get(number-1))) {
+            switch (bookList.size()) {
+                case 0:
+                    io.print("Lukuvinkkejä ei löytynyt annetulla haulla.");
+                    return;
+                case 1:
+                    if (dao.setRead(bookList.get(0))) {
                         io.print("Lukuvinkki merkitty luetuksi!");
                     } else {
                         io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
                     }
-                }
-        }
+                    return;
+                default:
+                    io.print("Mikä lukuvinkki merkitään luetuksi?\n");
+                    printBooksWithNumbers(bookList);
+                    io.print("\n(V)alitse");
+                    io.print("(T)arkenna hakuehtojasi");
+                    io.print("Takaisin (P)äävalikkoon");
 
-//        String link = io.getInput();
-//        for (Book book : bookList) {
-//            if (book.getLink().equals(link)) {
-//                dao.setRead(book);
-//                io.print("Lukuvinkki merkitty luetuksi");
-//                return;
-//            }
+                    String input = io.getInput();
+                    switch (input) {
+                        case ("v"):
+                            io.print("Valitse lukuvinkin numero");
+                            input = io.getInput();
+                            Integer number = -1;
+                            try {
+                                number = Integer.parseInt(input);
+                            } catch (Exception e) {
+                                io.print("Valinnan pitää olla numero!");
+                                io.print("Paina (Enter)");
+                                io.getInput();
+                            }
+                            if (number <= bookList.size() && number >= 0) {
+                                if (dao.setRead(bookList.get(number - 1))) {
+                                    io.print("Lukuvinkki merkitty luetuksi!");
+                                } else {
+                                    io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
+                                }
+                                return;
+                            }
+                            break;
+                        case ("t"):
+                            bookList = narrowingSearch(bookList);
+                            break;
+                        case ("p"):
+                            return;
+                        default:
+                            io.print("Virhe: komento oli puutteellinen!");
+                            break;
+                    }
+            }
+        }
     }
 
     public void findByTitle() {
