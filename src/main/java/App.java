@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import dao.BookDao;
+import domain.BookList;
 import domain.Search;
 import io.IO;
 
@@ -22,12 +23,12 @@ public class App {
 
     public void listAll() {
         List<Book> books = dao.getAll();
-        printBooks(books);
+        BookList.printBooks(books, io);
     }
     
     public void listAllUnread() {
         List<Book> books = dao.getUnread();
-        printBooks(books);
+        BookList.printBooks(books, io);
     }
 
     public void listByTitle(String title) {
@@ -35,42 +36,7 @@ public class App {
 
         List<Book> matching = search.findBooksByTitle(title, books);
 
-        printBooks(matching);
-    }
-    
-    private void printBooks(List<Book> books) {
-        if (books.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt.");
-        } else {
-            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
-            io.print("****");
-            for (int i = 0; i < books.size(); ++i) {
-                printBook(books.get(i));
-                io.print("****");
-            }
-        }
-    }
-
-    private void printBooksWithNumbers(List<Book> books) {
-        if (books.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt.");
-        } else {
-            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
-            io.print("****");
-            for (int i = 0; i < books.size(); ++i) {
-                io.print("(" + (i+1) + ")");
-                printBook(books.get(i));
-                io.print("****");
-            }
-        }
-    }
-
-    private void printBook(Book book) {
-        io.print("Linkki: " + book.getLink());
-        if (!(book.getTitle().isEmpty())) {
-            io.print("Otsikko: " + book.getTitle());
-        }
-
+        BookList.printBooks(matching, io);
     }
 
     public void createBook() {
@@ -90,13 +56,6 @@ public class App {
         } else {
             io.print("Lukuvinkin lisäys ei onnistunut!");
         }
-    }
-
-    private List<Book> filterBooks(List<Book> books, String title, String url) {
-        return books.stream()
-                .filter(b -> b.getTitle().toLowerCase().contains(title))
-                .filter(b -> b.getLink().toLowerCase().contains(url))
-                .collect(Collectors.toList());
     }
 
     private List<Book> narrowingSearch(List<Book> books) {
@@ -125,7 +84,7 @@ public class App {
                     break;
             }
         }
-        books = filterBooks(books, title, url);
+        books = BookList.filterBooks(books, title, url);
         return books;
     }
 
@@ -161,9 +120,10 @@ public class App {
                         io.print("Lukuvinkin merkitseminen luetuksi ei onnistunut!");
                     }
                     return;
+
                 default:
                     io.print("Mikä lukuvinkki merkitään luetuksi?\n");
-                    printBooksWithNumbers(bookList);
+                    BookList.printBooksWithNumbers(bookList, io);
                     io.print("\n(V)alitse");
                     io.print("(T)arkenna hakuehtojasi");
                     io.print("Takaisin (P)äävalikkoon");
@@ -195,6 +155,7 @@ public class App {
                             break;
                         case ("p"):
                             return;
+
                         default:
                             io.print("Virhe: komento oli puutteellinen!");
                             break;
@@ -246,7 +207,6 @@ public class App {
                     break;
             }
         }
-
     }
 
     public void switchMessage() {
