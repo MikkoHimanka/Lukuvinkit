@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BookList {
-    public static List<Book> filterBooks(List<Book> books, String url, String title) {
+    public static List<Book> filterBooks(List<Book> books, String title, String url) {
         return books.stream()
                 .filter(b -> b.getTitle().toLowerCase().contains(title))
                 .filter(b -> b.getLink().toLowerCase().contains(url))
@@ -39,8 +39,7 @@ public abstract class BookList {
                     break;
             }
         }
-        books = BookList.filterBooks(books, title, url);
-        return books;
+        return filterBooks(books, title, url);
     }
 
     public static void printBooksWithNumbers(List<Book> books, IO io) {
