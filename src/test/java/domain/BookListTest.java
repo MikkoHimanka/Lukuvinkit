@@ -1,6 +1,5 @@
 package domain;
 
-import io.IO;
 import io.StubIO;
 import org.junit.Before;
 import org.junit.Test;

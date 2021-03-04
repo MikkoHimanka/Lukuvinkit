@@ -87,7 +87,7 @@ public abstract class BookList {
             io.print("Paina (Enter)");
             io.getInput();
         }
-        if (number <= books.size() && number > 0) {
+        if (number < books.size() && number >= 0) {
             return books.get(number);
         }
         io.print("Valinta oli virheellinen!");

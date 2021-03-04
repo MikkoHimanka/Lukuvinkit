@@ -98,7 +98,7 @@ public class App {
                     io.print("(T)arkenna hakuehtojasi");
                     io.print("Takaisin (P)äävalikkoon");
 
-                    String input = io.getInput();
+                    String input = io.getInput().toLowerCase();
                     switch (input) {
                         case ("v"):
                             Book toBeMarked = BookList.choose(bookList, io);
