@@ -63,7 +63,7 @@ public class App {
         String title = "";
         String url = "";
 
-        if (bookList != null && bookList.isEmpty()) {
+        if (bookList == null || bookList.isEmpty()) {
             io.print("Lukuvinkkejä ei löytynyt.");
             return;
         }
@@ -111,6 +111,9 @@ public class App {
                             break;
                         case ("t"):
                             bookList = BookList.narrowingSearch(bookList, io);
+                            if (bookList == null) {
+                                return;
+                            }
                             break;
                         case ("p"):
                             return;
