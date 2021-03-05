@@ -33,6 +33,18 @@ public class NetworkConnectionImpl implements NetworkConnection {
         }
         return httpOk(connection);
     }
+    public boolean httpOk(URL url) {
+        HttpURLConnection connection;
+        try {
+            connection = openTimeoutConnection(url);
+            // Do not use HEAD to better support servers
+            // TODO what happens if the webpage is very long?
+        } catch(IOException ex) {
+            // The url was not formatted correctly
+            return false;
+        }
+        return httpOk(connection);
+    }
     private boolean httpOk(HttpURLConnection connection) {
         try {
             int response = connection.getResponseCode();
