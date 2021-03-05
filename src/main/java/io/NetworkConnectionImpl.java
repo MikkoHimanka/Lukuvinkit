@@ -11,6 +11,7 @@ public class NetworkConnectionImpl implements NetworkConnection {
     private URL onlineUrl;
     private int timeout;
 
+    // `onlineUrl` should always be online
     // `timeout` is the timeout set for establishing the connection and
     // for reading the content.
     // Does NOT include DNS lookup time!
@@ -38,7 +39,6 @@ public class NetworkConnectionImpl implements NetworkConnection {
         try {
             connection = openTimeoutConnection(url);
             // Do not use HEAD to better support servers
-            // TODO what happens if the webpage is very long?
         } catch(IOException ex) {
             // The url was not formatted correctly
             return false;
