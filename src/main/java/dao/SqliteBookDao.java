@@ -23,17 +23,6 @@ public class SqliteBookDao implements BookDao {
         }
     }
 
-    public static String getSchema() {
-        try {
-            // Java 8 problems
-            StringBuilder schema = new StringBuilder();
-            Stream<String> stream = Files.lines(Paths.get("schema.sql"), StandardCharsets.UTF_8);
-            stream.forEach(s -> schema.append(" ").append(s));
-            return schema.toString();
-        } catch (Exception ignored) { }
-        return null;
-    }
-
     @Override
     public Book create(Book book) {
         try {
@@ -91,23 +80,10 @@ public class SqliteBookDao implements BookDao {
             Statement s = this.db.createStatement();
             ResultSet r = s.executeQuery("SELECT id, link, title FROM Books WHERE markedRead=0");
 
-            List<Book> books = new ArrayList<>();
-
-            while (r.next()) {
-                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
-            }
-
-            return books;
+            return formList(r);
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private void createTable() {
-        try {
-            Statement statement = this.db.createStatement();
-            statement.execute(getSchema());
-        } catch (Exception ignored) { }
     }
     
     @Override
@@ -117,13 +93,7 @@ public class SqliteBookDao implements BookDao {
             p.setString(1, "%" + title + "%");
             ResultSet r = p.executeQuery();
 
-            List<Book> books = new ArrayList<>();
-
-            while (r.next()) {
-                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
-            }
-
-            return books;
+            return formList(r);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -140,5 +110,52 @@ public class SqliteBookDao implements BookDao {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean updateBook(Book book) {
+        // Given parameter is new book with variables that have already been updated
+        String newLink = book.getLink();
+        String newTitle = book.getTitle();
+        int id = book.getId();
+
+        try {
+            PreparedStatement p = this.db.prepareStatement("UPDATE Books SET link=?, title=? WHERE id=?");
+            p.setString(1, newLink);
+            p.setString(2, newTitle);
+            p.setInt(3, id);
+            p.execute();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private List<Book> formList(ResultSet r) throws SQLException {
+        List<Book> books = new ArrayList<>();
+
+        while (r.next()) {
+            books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
+        }
+
+        return books;
+    }
+
+    private String getSchema() {
+        try {
+            // Java 8 problems
+            StringBuilder schema = new StringBuilder();
+            Stream<String> stream = Files.lines(Paths.get("schema.sql"), StandardCharsets.UTF_8);
+            stream.forEach(s -> schema.append(" ").append(s));
+            return schema.toString();
+        } catch (Exception ignored) { }
+        return null;
+    }
+
+    private void createTable() {
+        try {
+            Statement statement = this.db.createStatement();
+            statement.execute(getSchema());
+        } catch (Exception ignored) { }
     }
 }

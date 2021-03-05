@@ -23,6 +23,14 @@ public class Book {
         this.id = id;
     }
 
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getLink() {
         return this.link;
     }
