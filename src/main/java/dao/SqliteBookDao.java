@@ -28,7 +28,7 @@ public class SqliteBookDao implements BookDao {
             // Java 8 problems
             StringBuilder schema = new StringBuilder();
             Stream<String> stream = Files.lines(Paths.get("schema.sql"), StandardCharsets.UTF_8);
-            stream.forEach(s -> schema.append(" " + s));
+            stream.forEach(s -> schema.append(" ").append(s));
             return schema.toString();
         } catch (Exception ignored) { }
         return null;
@@ -56,7 +56,7 @@ public class SqliteBookDao implements BookDao {
     }
 
     @Override
-    public Boolean setRead(Book book) {
+    public boolean setRead(Book book) {
         try {
             PreparedStatement p = this.db.prepareStatement("UPDATE Books SET markedRead=1 WHERE id=?");
             p.setString(1, String.valueOf(book.getId()));
@@ -131,7 +131,7 @@ public class SqliteBookDao implements BookDao {
     }
     
     @Override
-    public Boolean removeBook(Book book) {
+    public boolean removeBook(Book book) {
         try {
             PreparedStatement p = this.db.prepareStatement("DELETE FROM Books WHERE id=?");
             p.setString(1, String.valueOf(book.getId()));

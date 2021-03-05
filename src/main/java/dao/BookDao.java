@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface BookDao {
     Book create(Book book);
-    Boolean setRead(Book book);
+    boolean setRead(Book book);
     List<Book> getAll();
     List<Book> getUnread();
     List<Book> findByTitle(String title);
-    Boolean removeBook(Book book);
+    boolean removeBook(Book book);
 }
