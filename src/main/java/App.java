@@ -62,6 +62,9 @@ public class App {
         while (bookList.size() > 5) {
             io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
             bookList = BookList.narrowingSearch(bookList, io);
+            if (bookList == null) {
+                return null;
+            }
         }
         return bookList;
     }
