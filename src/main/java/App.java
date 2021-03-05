@@ -107,7 +107,7 @@ public class App {
     }
     
     private List<Book> switchOptions (List<Book> bookList, Command command) {
-        String input = io.getInput();
+        String input = io.getInput().toLowerCase();
         switch (input) {
             case ("v"):
                 Book choosen = BookList.choose(bookList, io);
