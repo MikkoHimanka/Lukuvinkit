@@ -129,4 +129,16 @@ public class SqliteBookDao implements BookDao {
             return null;
         }
     }
+    
+    @Override
+    public Boolean removeBook(Book book) {
+        try {
+            PreparedStatement p = this.db.prepareStatement("DELETE FROM Books WHERE id=?");
+            p.setString(1, String.valueOf(book.getId()));
+            p.execute();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

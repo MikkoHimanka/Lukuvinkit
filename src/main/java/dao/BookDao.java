@@ -10,4 +10,5 @@ public interface BookDao {
     List<Book> getAll();
     List<Book> getUnread();
     List<Book> findByTitle(String title);
+    Boolean removeBook(Book book);
 }
