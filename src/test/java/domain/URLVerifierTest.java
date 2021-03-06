@@ -35,8 +35,12 @@ public class URLVerifierTest {
         assertEquals(URLVerificationResult.OK, verifier.verify("www.helsinki.fi"));
     }
     @Test
-    public void testOkWithoutProtocol() {
+    public void testOkWithoutProtocolHttp() {
         assertEquals(URLVerificationResult.OK, verifier.verify("www.helsinki.fi"));
+    }
+    @Test
+    public void testOkWithoutProtocolHttps() {
+        assertEquals(URLVerificationResult.OK, verifier.verify("www.is.fi/viihde"));
     }
     @Test
     public void testInvalidUrl() {
