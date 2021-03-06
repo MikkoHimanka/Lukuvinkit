@@ -8,17 +8,21 @@ import dao.BookDao;
 import domain.BookList;
 import domain.Search;
 import io.IO;
+import domain.URLVerifier;
+import domain.URLVerificationResult;
 
 public class App {
 
     private final BookDao dao;
     private final IO io;
     private final Search search;
+    private final URLVerifier urlVerifier;
 
-    public App(BookDao dao, IO io, Search search) {
+    public App(BookDao dao, IO io, Search search, URLVerifier urlVerifier) {
         this.dao = dao;
         this.io = io;
         this.search = search;
+        this.urlVerifier = urlVerifier;
     }
 
     public void listAll() {
@@ -42,9 +46,16 @@ public class App {
     public void createBook() {
         io.print("Lisää linkki: (pakollinen)");
         String link = io.getInput();
-        if (link.isEmpty()) {
+        URLVerificationResult verificationResult = urlVerifier.verify(link);
+        urlVerifier.printVerificationResult(verificationResult, io);
+        if (verificationResult == URLVerificationResult.NETWORK_UNREACHABLE) {
+            if (!confirmLinkAddition()) {
+                io.print("Lukuvinkin lisäys ei onnistunut!");
+                return;
+            }
+        }
+        else if (verificationResult != URLVerificationResult.OK) {
             io.print("Lukuvinkin lisäys ei onnistunut!");
-            io.print("Linkki ei voi olla tyhjä.");
             return;
         }
         io.print("Lisää otsikko:");
@@ -57,7 +68,18 @@ public class App {
             io.print("Lukuvinkin lisäys ei onnistunut!");
         }
     }
-    
+
+    private boolean confirmLinkAddition() {
+        io.print("Haluatko varmasti lisätä linkin (k/E)?");
+        String input = io.getInput().toLowerCase();
+        switch (input) {
+            case ("k"):
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private List<Book> searchValidBooks(List<Book> bookList) {
         while (bookList.size() > 5) {
             io.print("Löytyi " + bookList.size() + " lukuvinkkiä");

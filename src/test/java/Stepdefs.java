@@ -2,7 +2,9 @@
 import dao.SqliteBookDao;
 import domain.Book;
 import domain.Search;
+import domain.URLVerifier;
 import io.StubIO;
+import io.StubNetworkConnection;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,6 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import java.net.URL;
+import java.util.ArrayList;
+import java.net.MalformedURLException;
 
 public class Stepdefs {
     
@@ -21,11 +26,27 @@ public class Stepdefs {
     StubIO ioStub;
     SqliteBookDao sqliteDb;
     Search search;
+    URLVerifier verifier;
     
     @Before
     public void setup() {
         ioStub = new StubIO();
         search = new Search(3.0);
+    }
+
+    @Before
+    public void initVerifier() {
+        List<URL> validUrls = new ArrayList<URL>();
+        try {
+            validUrls.add(new URL("http://www.google.com"));
+            validUrls.add(new URL("http://www.bing.com"));
+            validUrls.add(new URL("http://www.is.fi"));
+        } catch(MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        StubNetworkConnection connection;
+        connection = new StubNetworkConnection(true, validUrls);
+        verifier = new URLVerifier(connection);
     }
     
     @Given("tietokanta on alustettu")
@@ -37,7 +58,7 @@ public class Stepdefs {
     @When("linkki {string} ja otsikko {string} ovat annettu")
     public void validLinkAndTitleAreEntered(String link, String title) {
         sqliteDb.create(new Book(link, title));
-        app = new App(sqliteDb, ioStub, search);
+        app = new App(sqliteDb, ioStub, search, verifier);
         app.listAll();
     }
     
@@ -60,7 +81,7 @@ public class Stepdefs {
     @When("lukemattoman lukuvinkin linkki {string} on annettu")
     public void unreadBookIsGiven(String link) {
         sqliteDb.setRead(new Book(link, "", 1));
-        app = new App(sqliteDb, ioStub, search);
+        app = new App(sqliteDb, ioStub, search, verifier);
         app.listAllUnread();
     }
     
