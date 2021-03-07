@@ -1,10 +1,15 @@
 import dao.SqliteBookDao;
+import domain.Book;
 import domain.Search;
 import domain.URLVerifier;
 import io.ConsoleIO;
 import io.NetworkConnectionImpl;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class Main {
     public static void main(String[] args) {

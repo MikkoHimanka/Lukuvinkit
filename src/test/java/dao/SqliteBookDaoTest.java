@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -118,6 +119,25 @@ public class SqliteBookDaoTest {
         book = sqliteDb.getAll().get(0);
         assertNull(book.getTitle());
         assertEquals(book.getLink(), "www.y.fi");
+    }
+
+    @Test
+    public void testTags() {
+        Book book = new Book("hi");
+        book = sqliteDb.create(book);
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("1");
+        tags.add("2");
+        tags.add("3");
+        sqliteDb.addTags(book, tags);
+        List<Book> res = sqliteDb.findByTag("1");
+        assertEquals(res.size(), 1);
+        assertEquals(res.get(0).getLink(), book.getLink());
+        List<String> t = sqliteDb.findTagsByBook(book);
+        assertEquals(t.size(), 3);
+        assertEquals(t.get(0), "1");
+        assertEquals(t.get(1), "2");
+        assertEquals(t.get(2), "3");
     }
 
     @After
