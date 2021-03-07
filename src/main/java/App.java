@@ -47,7 +47,7 @@ public class App {
         io.print("Lisää linkki: (pakollinen)");
         String link = io.getInput();
         URLVerificationResult verificationResult = urlVerifier.verify(link);
-        urlVerifier.printVerificationResult(verificationResult, io);
+        URLVerifier.printVerificationResult(verificationResult, io);
         if (verificationResult == URLVerificationResult.NETWORK_UNREACHABLE) {
             if (!confirmLinkAddition()) {
                 io.print("Lukuvinkin lisäys ei onnistunut!");
@@ -72,12 +72,7 @@ public class App {
     private boolean confirmLinkAddition() {
         io.print("Haluatko varmasti lisätä linkin (k/E)?");
         String input = io.getInput().toLowerCase();
-        switch (input) {
-            case ("k"):
-                return true;
-            default:
-                return false;
-        }
+        return input.equals("k");
     }
 
     private List<Book> searchValidBooks(List<Book> bookList) {
@@ -132,8 +127,8 @@ public class App {
         String input = io.getInput().toLowerCase();
         switch (input) {
             case ("v"):
-                Book choosen = BookList.choose(bookList, io);
-                if (command.run(choosen)) {
+                Book chosen = BookList.choose(bookList, io);
+                if (command.run(chosen)) {
                     return null;
                 }
                 return bookList;
