@@ -131,6 +131,62 @@ public class SqliteBookDao implements BookDao {
         }
     }
 
+    @Override
+    public boolean addTags(Book book, List<String> tags) {
+        try {
+            int id = book.getId();
+            for (String tag : tags) {
+                addTag(id, tag);
+            }
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<Book> findByTag(String tag) {
+        try {
+            PreparedStatement p = this.db.prepareStatement(
+                    "SELECT B.id, B.link, B.title " +
+                    "FROM Books B, Tags T " +
+                    "WHERE B.id = T.book_id AND T.tag=?");
+            p.setString(1, tag);
+            ResultSet r = p.executeQuery();
+
+            return formList(r);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> findTagsByBook(Book book) {
+        try {
+            int id = book.getId();
+            PreparedStatement p = this.db.prepareStatement(
+                    "SELECT T.tag " +
+                            "FROM Books B, Tags T " +
+                            "WHERE B.id = T.book_id AND B.id = ?");
+            p.setInt(1, id);
+            ResultSet r = p.executeQuery();
+            List<String> result = new ArrayList<>();
+            while (r.next()) {
+                result.add(r.getString("tag"));
+            }
+            return result;
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private void addTag(int id, String tag) throws SQLException {
+        PreparedStatement p = this.db.prepareStatement("INSERT INTO Tags (book_id, tag) VALUES (?, ?)");
+        p.setInt(1, id);
+        p.setString(2, tag);
+        p.execute();
+    }
+
     private List<Book> formList(ResultSet r) throws SQLException {
         List<Book> books = new ArrayList<>();
 
@@ -155,7 +211,7 @@ public class SqliteBookDao implements BookDao {
     private void createTable() {
         try {
             Statement statement = this.db.createStatement();
-            statement.execute(getSchema());
+            statement.executeUpdate(getSchema());
         } catch (Exception ignored) { }
     }
 }

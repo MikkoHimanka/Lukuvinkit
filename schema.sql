@@ -4,3 +4,9 @@ CREATE TABLE IF NOT EXISTS Books (
     title TEXT,
     markedRead INTEGER
 );
+
+CREATE TABLE IF NOT EXISTS Tags (
+    id INTEGER PRIMARY KEY,
+    book_id INTEGER,
+    tag TEXT
+);

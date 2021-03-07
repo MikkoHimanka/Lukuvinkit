@@ -12,4 +12,7 @@ public interface BookDao {
     List<Book> findByTitle(String title);
     boolean removeBook(Book book);
     boolean updateBook(Book book);
+    boolean addTags(Book book, List<String> tags);
+    List<Book> findByTag(String tag);
+    List<String> findTagsByBook(Book book);
 }
