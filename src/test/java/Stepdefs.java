@@ -19,15 +19,16 @@ import static org.junit.Assert.assertEquals;
 import java.net.URL;
 import java.util.ArrayList;
 import java.net.MalformedURLException;
+import static org.junit.Assert.assertTrue;
 
 public class Stepdefs {
-    
+
     App app;
     StubIO ioStub;
     SqliteBookDao sqliteDb;
     Search search;
     URLVerifier verifier;
-    
+
     @Before
     public void setup() {
         ioStub = new StubIO();
@@ -41,66 +42,107 @@ public class Stepdefs {
             validUrls.add(new URL("http://www.google.com"));
             validUrls.add(new URL("http://www.bing.com"));
             validUrls.add(new URL("http://www.is.fi"));
-        } catch(MalformedURLException ex) {
+        } catch (MalformedURLException ex) {
             throw new RuntimeException(ex);
         }
         StubNetworkConnection connection;
         connection = new StubNetworkConnection(true, validUrls);
         verifier = new URLVerifier(connection);
     }
-    
+
     @Given("tietokanta on alustettu")
     public void databaseIsInitialized() throws SQLException {
         sqliteDb = new SqliteBookDao("test.db");
+    }
+
+    @When("tietokantaan tallennetaan kaksi lukuvinkkiä")
+    public void addExampleBooks() {
         initializeBooks();
     }
-    
-    @When("linkki {string} ja otsikko {string} ovat annettu")
-    public void validLinkAndTitleAreEntered(String link, String title) {
-        sqliteDb.create(new Book(link, title));
+
+    @When("valitaan komento {string} ja syötetään linkki {string} sekä otsikko {string} tietoja pyydettäessä")
+    public void linkAndTitleAreEntered(String command, String link, String title) {
+        ioStub.addInput(command);
+        ioStub.addInput(link);
+        ioStub.addInput(title);
+        ioStub.addInput("s");
         app = new App(sqliteDb, ioStub, search, verifier);
-        app.listAll();
+        app.switchContext();
     }
-    
-    @Then("lukuvinkki on lisatty listalle")
-    public void bookIsAddedToList() throws SQLException {
+
+    @When("valitaan komento {string}")
+    public void commandIsEntered(String command) {
+        ioStub.addInput(command);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier);
+        app.switchContext();
+    }
+
+    @When("valitaan komento {string} ja syötetään linkki {string} linkkiä pyydettäessä")
+    public void invalidLinkAndTitleAreEntered(String command, String link) {
+        ioStub.addInput(command);
+        ioStub.addInput(link);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier);
+        app.switchContext();
+    }
+
+    @When("merkataan toinen lukuvinkki luetuksi valitsemalla komennot {string}, {string} ja {string}")
+    public void bookIsMarkedAsRead(String cmd1, String cmd2, String cmd3) {
+        ioStub.addInput(cmd1);
+        ioStub.addInput(cmd2);
+        ioStub.addInput(cmd3);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier);
+        app.switchContext();
+    }
+
+    @When("merkataan lukuvinkit luetuiksi valitsemalla komennot {string}, {string} ja {string} sekä {string}")
+    public void booksAreMarkedAsRead(String cmd1, String cmd2, String cmd3, String cmd4) {
+        ioStub.addInput(cmd1);
+        ioStub.addInput(cmd2);
+        ioStub.addInput(cmd3);
+        ioStub.addInput(cmd4);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier);
+        app.switchContext();
+    }
+
+    @Then("sovellus hyväksyy syötteet ja tulostaa {string}")
+    public void bookIsAddedToList(String print) throws SQLException {
         List<String> out = ioStub.getPrints();
-        assertEquals(out.get(0), "Löytyi 3 lukuvinkkiä:");
-        assertEquals(out.get(1), "****");
-        assertEquals(out.get(2), "Linkki: www.google.com");
-        assertEquals(out.get(3), "****");
-        assertEquals(out.get(4), "Linkki: www.bing.com");
-        assertEquals(out.get(5), "****");
-        assertEquals(out.get(6), "Linkki: www.is.fi");
-        assertEquals(out.get(7), "Otsikko: lehti");
-        assertEquals(out.get(8), "****");
-        assertEquals(out.size(), 9);
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertTrue(out.contains(print));
+        assertTrue(out.contains("Lisää otsikko:"));
         deleteFile();
     }
-    
-    @When("lukemattoman lukuvinkin linkki {string} on annettu")
-    public void unreadBookIsGiven(String link) {
-        sqliteDb.setRead(new Book(link, "", 1));
-        app = new App(sqliteDb, ioStub, search, verifier);
-        app.listAllUnread();
-    }
-    
-    @Then("lukuvinkki on merkitty luetuksi")
-    public void linkIsMarkedAsRead() throws SQLException {
+
+    @Then("sovellus tulostaa {string}")
+    public void systemPrints(String print) throws SQLException {
         List<String> out = ioStub.getPrints();
-        assertEquals(out.get(0), "Löytyi 1 lukuvinkkiä:");
-        assertEquals(out.get(1), "****");
-        assertEquals(out.get(2), "Linkki: www.bing.com");
-        assertEquals(out.get(3), "****");
-        assertEquals(out.size(), 4);
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertTrue(out.contains(print));
         deleteFile();
     }
-    
+
+    @Then("sovellus listaa lukuvinkit")
+    public void systemListsBooks() {
+        List<String> out = ioStub.getPrints();
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");;
+        assertTrue(out.contains("Linkki: www.bing.com"));
+        assertTrue(out.contains("Linkki: www.bing.com"));
+        assertTrue(out.contains("Linkki: www.is.fi"));
+    }
+
+
     private void initializeBooks() {
         sqliteDb.create(new Book("www.google.com", "", 1));
         sqliteDb.create(new Book("www.bing.com", "", 2));
     }
-    
+
     private void deleteFile() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
@@ -109,5 +151,5 @@ public class Stepdefs {
         File db = new File("test.db");
         db.delete();
     }
-}
 
+}
