@@ -113,9 +113,10 @@ public class AppTest {
         assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
         assertEquals(out.get(6), "(E)tsi lukuvinkkejä");
         assertEquals(out.get(7), "(P)oista lukuvinkki");
-        assertEquals(out.get(8), "(S)ulje sovellus");
-        assertEquals(out.get(9), "Kiitos käynnistä, sovellus sulkeutuu.");
-        assertEquals(out.size(), 10);
+        assertEquals(out.get(8), "(Mu)okkaa lukuvinkkiä");
+        assertEquals(out.get(9), "(S)ulje sovellus");      
+        assertEquals(out.get(10), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 11);
     }
 
     @Test
@@ -133,18 +134,20 @@ public class AppTest {
         assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
         assertEquals(out.get(6), "(E)tsi lukuvinkkejä");
         assertEquals(out.get(7), "(P)oista lukuvinkki");
-        assertEquals(out.get(8), "(S)ulje sovellus");
-        assertEquals(out.get(9), "Lukuvinkkejä ei löytynyt.");
-        assertEquals(out.get(10), "Komennot:");
-        assertEquals(out.get(11), "(L)isää uusi lukuvinkki");
-        assertEquals(out.get(12), "(N)äytä tallennetut lukuvinkit");
-        assertEquals(out.get(13), "(M)erkitse lukuvinkki luetuksi");
-        assertEquals(out.get(14), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(15), "(E)tsi lukuvinkkejä");
-        assertEquals(out.get(16), "(P)oista lukuvinkki");
-        assertEquals(out.get(17), "(S)ulje sovellus");
-        assertEquals(out.get(18), "Kiitos käynnistä, sovellus sulkeutuu.");
-        assertEquals(out.size(), 19);
+        assertEquals(out.get(8), "(Mu)okkaa lukuvinkkiä");
+        assertEquals(out.get(9), "(S)ulje sovellus");
+        assertEquals(out.get(10), "Lukuvinkkejä ei löytynyt.");
+        assertEquals(out.get(11), "Komennot:");
+        assertEquals(out.get(12), "(L)isää uusi lukuvinkki");
+        assertEquals(out.get(13), "(N)äytä tallennetut lukuvinkit");
+        assertEquals(out.get(14), "(M)erkitse lukuvinkki luetuksi");
+        assertEquals(out.get(15), "(Li)staa lukemattomat lukuvinkit");
+        assertEquals(out.get(16), "(E)tsi lukuvinkkejä");
+        assertEquals(out.get(17), "(P)oista lukuvinkki");
+        assertEquals(out.get(18), "(Mu)okkaa lukuvinkkiä");
+        assertEquals(out.get(19), "(S)ulje sovellus");
+        assertEquals(out.get(20), "Kiitos käynnistä, sovellus sulkeutuu.");
+        assertEquals(out.size(), 21);
     }
 
     @Test
@@ -154,7 +157,7 @@ public class AppTest {
         App app = new App(sqliteDb, io, search, verifier);
         app.switchContext();
         List<String> out = io.getPrints();
-        assertEquals(out.get(9), "Virhe: komento oli puutteellinen!");
+        assertEquals(out.get(10), "Virhe: komento oli puutteellinen!");
     }
 
     @Test

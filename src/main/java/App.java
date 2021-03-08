@@ -29,7 +29,7 @@ public class App {
         List<Book> books = dao.getAll();
         BookList.printBooks(books, io);
     }
-    
+
     public void listAllUnread() {
         List<Book> books = dao.getUnread();
         BookList.printBooks(books, io);
@@ -53,8 +53,7 @@ public class App {
                 io.print("Lukuvinkin lisäys ei onnistunut!");
                 return;
             }
-        }
-        else if (verificationResult != URLVerificationResult.OK) {
+        } else if (verificationResult != URLVerificationResult.OK) {
             io.print("Lukuvinkin lisäys ei onnistunut!");
             return;
         }
@@ -85,7 +84,7 @@ public class App {
         }
         return bookList;
     }
-    
+
     private void findCorrectBook(List<Book> bookList, Command command) {
         if (bookList == null || bookList.isEmpty()) {
             io.print("Lukuvinkkejä ei löytynyt.");
@@ -106,8 +105,8 @@ public class App {
             }
         }
     }
-    
-    private List<Book> switchBookListSize (List<Book> bookList, Command command) {
+
+    private List<Book> switchBookListSize(List<Book> bookList, Command command) {
         if (bookList == null) {
             return null;
         }
@@ -122,8 +121,8 @@ public class App {
                 return bookList;
         }
     }
-    
-    private List<Book> switchOptions (List<Book> bookList, Command command) {
+
+    private List<Book> switchOptions(List<Book> bookList, Command command) {
         String input = io.getInput().toLowerCase();
         switch (input) {
             case ("v"):
@@ -141,7 +140,15 @@ public class App {
                 return bookList;
         }
     }
-    
+
+    public void editBook() {
+        
+        Command command = new EditBook(io, dao);
+        List<Book> bookList = dao.getAll();
+        
+        findCorrectBook(bookList, command);
+    }
+
     public void removeBook() {
         Command command = new RemoveBook(io, dao);
         List<Book> bookList = dao.getAll();
@@ -182,6 +189,9 @@ public class App {
                 case "m":
                     markAsRead();
                     break;
+                case "mu":
+                    editBook();
+                    break;
                 case "li":
                     listAllUnread();
                     break;
@@ -210,6 +220,7 @@ public class App {
         io.print("(Li)staa lukemattomat lukuvinkit");
         io.print("(E)tsi lukuvinkkejä");
         io.print("(P)oista lukuvinkki");
+        io.print("(Mu)okkaa lukuvinkkiä");
         io.print("(S)ulje sovellus");
     }
 }
