@@ -21,7 +21,7 @@ Ohjelman voi myös käynnistää ohjelmointiympäristössä, esimerkiksi Netbean
 
 ## Toiminnon valinta
 
-Ohjelmaaa käytetään tekstikäyttöliittymän kautta. Käynnistyessään ohjelma listaa valittavassa olevat komennot. Komentoa vastaava kirjain on merkitty sulkuihin (kirjainkoolla ei ole merkitystä).
+Ohjelmaaa käytetään tekstikäyttöliittymän kautta. Käynnistyessään ohjelma listaa valittavassa olevat komennot. Komentoa vastaava kirjain tai kirjainyhdistelmä on merkitty sulkuihin (kirjainkoolla ei ole merkitystä).
 
 ```
 (L)isää uusi lukuvinkki
@@ -63,6 +63,18 @@ Painamalla Li käyttäjä voi listata kaikki sovellukseen tallennetut merkitsem�
 E
 ````
 Painamalla E käyttäjä voi hakea sovelluksesta otsikon perusteella lukuvinkkejä. Sovellus pyytää käyttäjää kirjoittamaan hakusanan, jonka avulla lukuvinkkejä haetaan.
+
+## Lukuvinkin poistaminen
+````
+P
+````
+Painamalla P käyttäjä voi avata alinäkymän lukuvinkin poistamiselle. Alinäkymässä sovellus listaa ja numeroi lukuvinkit tai pyytää tarvittaessa tarkentamaan hakua. Painamalla V käyttäjä pääsee syöttämään poistettavan lukuvinkin numeron. Painamalla P käyttäjä voi siirtyä takaisin päävalikkoon poistamatta lukuvinkkiä.
+
+## Lukuvinkin muokkaaminen
+````
+Mu
+````
+Kirjoittamalla Mu käyttäjä voi avata alinäkymän lukuvinkin muokkaamiselle. Alinäkymässä sovellus listaa ja numeroi lukuvinkit tai pyytää tarvittaessa tarkentamaan hakua. Painamalla V käyttäjä pääsee syöttämään muokattavan lukuvinkin numeron. Painamalla P käyttäjä voi siirtyä takaisin päävalikkoon muokkaamatta lukuvinkkiä. Lukuvinkin valinnan jälkeen käyttäjä voi muokata lukuvinkin linkkiä painamalla L, muokata otsikkoa painamalla O tai palata aikaisempaan näkymään (lukuvinkin valintaan) painamalla V.
 
 ## Ohjelman sulkeminen
 ```
