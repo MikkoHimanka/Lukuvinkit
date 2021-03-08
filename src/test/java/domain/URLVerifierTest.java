@@ -43,7 +43,20 @@ public class URLVerifierTest {
         assertEquals(URLVerificationResult.OK, verifier.verify("www.is.fi/viihde"));
     }
     @Test
-    public void testInvalidUrl() {
+    public void testNonemptyInvalid() {
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("http://helsinki.fi://"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("asdfhttp://helsinki.fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("httpss://helsinki.fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("ftp://helsinki.fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("irc://helsinki.fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("ew_/irc://fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("://"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("://helsinki.fi"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("::///"));
+        assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify("www.helsinki.fi://lol"));
+    }
+    @Test
+    public void testEmptyUrl() {
         assertEquals(URLVerificationResult.INVALID_FORMAT, verifier.verify(""));
     }
     @Test
