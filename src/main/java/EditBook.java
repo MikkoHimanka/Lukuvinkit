@@ -1,12 +1,17 @@
 
 import dao.BookDao;
 import domain.Book;
+import domain.URLVerificationResult;
+import domain.URLVerifier;
 import io.IO;
 
 public class EditBook extends Command {
 
-    public EditBook(IO io, BookDao dao) {
+    private URLVerifier urlVerifier;
+
+    public EditBook(IO io, BookDao dao, URLVerifier urlVerifier) {
         super(io, dao);
+        this.urlVerifier = urlVerifier;
     }
 
     @Override
@@ -44,12 +49,17 @@ public class EditBook extends Command {
             switch (input) {
                 case ("l"):
                     io.print("Anna uusi linkki (aiempi " + link + "):");
-                    link = io.getInput().toLowerCase();
+                    link = io.getInput();
+                    URLVerificationResult verificationResult = urlVerifier.verify(link);
+                    URLVerifier.printVerificationResult(verificationResult, io);
+                    if (verificationResult != URLVerificationResult.OK) {
+                        return null;
+                    }
                     book.setLink(link);
                     break loop;
                 case ("o"):
                     io.print("Anna uusi otsikko (aiempi " + title + "):");
-                    book.setTitle(io.getInput().toLowerCase());
+                    book.setTitle(io.getInput());
                     break loop;
                 case ("v"):
                     return null;

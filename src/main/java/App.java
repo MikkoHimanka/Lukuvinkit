@@ -1,5 +1,8 @@
 
 import domain.Book;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -59,10 +62,21 @@ public class App {
         }
         io.print("Lisää otsikko:");
         String title = io.getInput();
+        io.print("Lisää tagit pilkulla eroteltuna:");
+        String tagString = io.getInput();
+        String[] tags = tagString.split(",");
 
         Book result = dao.create(new Book(link, title));
         if (result != null) {
             io.print("Lukuvinkki lisätty onnistuneesti");
+            if (tagString.length() != 0) {
+                boolean res = dao.addTags(result, Arrays.asList(tags));
+                if (res) {
+                    io.print("Tagien lisäys onnistui");
+                } else {
+                    io.print("Tagien lisäys epäonnistui");
+                }
+            }
         } else {
             io.print("Lukuvinkin lisäys ei onnistunut!");
         }
@@ -143,7 +157,7 @@ public class App {
 
     public void editBook() {
         
-        Command command = new EditBook(io, dao);
+        Command command = new EditBook(io, dao, urlVerifier);
         List<Book> bookList = dao.getAll();
         
         findCorrectBook(bookList, command);

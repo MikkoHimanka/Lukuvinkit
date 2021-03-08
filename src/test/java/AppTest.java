@@ -205,12 +205,14 @@ public class AppTest {
         io.addInput("https://is.fi");
         io.addInput("k");
         io.addInput("iltasanomat urheilu");
+        io.addInput("tag");
         app.createBook();
         List<String> out = io.getPrints();
 
         assertEquals("Internet-yhteyden luonti epäonnistui: Linkin oikeellisuus epävarmaa.", out.get(1));
         assertEquals("Haluatko varmasti lisätä linkin (k/E)?", out.get(2));
-        assertEquals("Lukuvinkki lisätty onnistuneesti", out.get(4));
+        assertEquals("Lukuvinkki lisätty onnistuneesti", out.get(5));
+        assertEquals("Tagien lisäys onnistui", out.get(6));
         assertEquals(1, sqliteDb.findByTitle("iltasanomat urheilu").size());
     }
 

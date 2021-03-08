@@ -60,11 +60,12 @@ public class Stepdefs {
         initializeBooks();
     }
 
-    @When("valitaan komento {string} ja syötetään linkki {string} sekä otsikko {string} tietoja pyydettäessä")
+    @When("valitaan komento {string} ja syötetään linkki {string} sekä otsikko {string}, eikä syötetä tagejä tietoja pyydettäessä")
     public void linkAndTitleAreEntered(String command, String link, String title) {
         ioStub.addInput(command);
         ioStub.addInput(link);
         ioStub.addInput(title);
+        ioStub.addInput("");
         ioStub.addInput("s");
         app = new App(sqliteDb, ioStub, search, verifier);
         app.switchContext();
