@@ -15,3 +15,4 @@ Ohjelmistotuotannon miniprojekti 2021. Sovelluksen käyttötarkoitus on lukuvink
 - Sovelluksen käyttöohje on päivitetty tarvittaessa
 
 ![Github Actions](https://github.com/MikkoHimanka/Lukuvinkit/workflows/Java%20CI%20with%20Gradle/badge.svg)
+[![codecov](https://codecov.io/gh/MikkoHimanka/Lukuvinkit/branch/main/graph/badge.svg?token=ZT0ZRNXSA0)](https://codecov.io/gh/MikkoHimanka/Lukuvinkit)
