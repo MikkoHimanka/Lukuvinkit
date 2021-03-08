@@ -23,7 +23,7 @@ public class NetworkConnectionImpl implements NetworkConnection {
         HttpURLConnection connection;
         try {
             connection = openTimeoutConnection(onlineUrl);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
         try {
@@ -39,8 +39,7 @@ public class NetworkConnectionImpl implements NetworkConnection {
         try {
             connection = openTimeoutConnection(url);
             // Do not use HEAD to better support servers
-        } catch(IOException ex) {
-            // The url was not formatted correctly
+        } catch (Exception ex) {
             return false;
         }
         return httpOk(connection);
@@ -53,7 +52,7 @@ public class NetworkConnectionImpl implements NetworkConnection {
             return false;
         }
     }
-    private HttpURLConnection openTimeoutConnection(URL url) throws IOException {
+    private HttpURLConnection openTimeoutConnection(URL url) throws IOException, ClassCastException {
         HttpURLConnection connection;
         connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(this.timeout);
