@@ -33,7 +33,7 @@ public class AppTest {
     private StubApi bookApi;
 
     @Before
-    public void initDb() throws SQLException {
+    public void initDb() {
         sqliteDb = new SqliteBookDao("test.db");
     }
 
@@ -62,7 +62,7 @@ public class AppTest {
         app.listAll();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Lukuvinkkeja ei loytynyt.");
-    assertEquals(out.size(), 1);
+        assertEquals(out.size(), 1);
     }
     
     @Test
@@ -284,6 +284,55 @@ public class AppTest {
         assertEquals(out.get(0), "Anna kirjan isbn-tunnus:");
         assertEquals(out.get(1), "Kirjan hakeminen epaonnistui!");
         assertEquals(out.get(2), "Tarkista etta isbn-tunnus on annettu oikein");
+    }
+
+    @Test
+    public void testRemoveBook() {
+        sqliteDb.create(new Book("x"));
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.removeBook();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 1);
+        assertEquals(out.get(0), "Lukuvinkki on poistettu!");
+    }
+
+    @Test
+    public void testFindbook() {
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.removeBook();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 1);
+        assertEquals(out.get(0), "Lukuvinkkeja ei loytynyt.");
+    }
+
+    @Test
+    public void testEditBook() {
+        sqliteDb.create(new Book("x", "y"));
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("o");
+        io.addInput("z");
+        app.editBook();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 7);
+        assertEquals(out.get(0), "Valitse muokattava ominaisuus:");
+        assertEquals(out.get(1), "Muokkaa (L)inkkia");
+        assertEquals(out.get(2), "Muokkaa (O)tsikkoa");
+        assertEquals(out.get(3), "Muokkaa (K)uvausta");
+        assertEquals(out.get(4), "Takaisin (V)alintaan");
+        assertEquals(out.get(5), "Anna uusi otsikko (aiempi y):");
+        assertEquals(out.get(6), "Lukuvinkin tiedot paivitetty onnistuneesti.");
+    }
+
+    @Test
+    public void testSwitchContext() {
+        io.addInput("mu");
+        io.addInput("p");
+        io.addInput("s");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 34);
+        assertEquals(out.get(11), "Lukuvinkkeja ei loytynyt.");
     }
 
     @After
