@@ -72,6 +72,7 @@ public class AppTest {
         App app = new App(sqliteDb, io, search, verifier);
         app.listAll();
         List<String> out = io.getPrints();
+
         assertEquals(out.get(0), "Loytyi 2 lukuvinkkia:");
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: link");
@@ -205,14 +206,15 @@ public class AppTest {
         io.addInput("https://is.fi");
         io.addInput("k");
         io.addInput("iltasanomat urheilu");
+        io.addInput("");
         io.addInput("tag");
         app.createBook();
         List<String> out = io.getPrints();
 
         assertEquals("Internet-yhteyden luonti epaonnistui: Linkin oikeellisuus epavarmaa.", out.get(1));
         assertEquals("Haluatko varmasti lisata linkin (k/E)?", out.get(2));
-        assertEquals("Lukuvinkki lisatty onnistuneesti", out.get(5));
-        assertEquals("Tagien lisays onnistui", out.get(6));
+        assertEquals("Lukuvinkki lisatty onnistuneesti", out.get(6));
+        assertEquals("Tagien lisays onnistui", out.get(7));
         assertEquals(1, sqliteDb.findByTitle("iltasanomat urheilu").size());
     }
 
