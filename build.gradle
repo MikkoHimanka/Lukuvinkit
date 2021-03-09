@@ -16,6 +16,7 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:6.8.1'
     testImplementation 'junit:junit:4.13'
     compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+    compile 'io.github.cdimascio:java-dotenv:5.2.2'
 }
 
 test {
