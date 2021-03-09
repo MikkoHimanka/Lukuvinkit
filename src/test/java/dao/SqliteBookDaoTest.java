@@ -160,11 +160,12 @@ public class SqliteBookDaoTest {
 
     @After
     public void deleteFile() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+        /*Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
-        s.execute("DROP TABLE Books;");
+        s.execute("DROP TABLE Books");
         s.execute("DROP TABLE Tags");
-        conn.close();
+        s.execute("DROP TABLE Descriptions");
+        conn.close();*/
         File db = new File("test.db");
         db.delete();
     }
