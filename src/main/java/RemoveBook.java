@@ -21,7 +21,7 @@ public class RemoveBook extends Command {
 
     @Override
     public void actionQuestion() {
-        io.print("Mikä lukuvinkki poistetaan?\n");
+        io.print("Mika lukuvinkki poistetaan?\n");
     }
     
 }

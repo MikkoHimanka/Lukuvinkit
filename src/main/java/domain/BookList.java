@@ -21,7 +21,7 @@ public abstract class BookList {
             io.print("Tarkenna hakuehtojasi:");
             io.print("Tarkenna (L)inkki");
             io.print("Tarkenna (O)tsikko");
-            io.print("Takaisin (P)äävalikkoon");
+            io.print("Takaisin (P)aavalikkoon");
             String input = io.getInput().toLowerCase();
             switch (input) {
                 case ("l"):
@@ -44,9 +44,9 @@ public abstract class BookList {
 
     public static void printBooksWithNumbers(List<Book> books, IO io) {
         if (books.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt.");
+            io.print("Lukuvinkkeja ei loytynyt.");
         } else {
-            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
+            io.print("Loytyi " + books.size() + " lukuvinkkia:");
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
                 io.print("(" + (i+1) + ")");
@@ -58,9 +58,9 @@ public abstract class BookList {
 
     public static void printBooks(List<Book> books, IO io) {
         if (books.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt.");
+            io.print("Lukuvinkkeja ei loytynyt.");
         } else {
-            io.print("Löytyi " + books.size() + " lukuvinkkiä:");
+            io.print("Loytyi " + books.size() + " lukuvinkkia:");
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
                 printBook(books.get(i), io);
@@ -86,7 +86,7 @@ public abstract class BookList {
         try {
             number += Integer.parseInt(input);
         } catch (Exception e) {
-            io.print("Valinnan täytyy olla numero!");
+            io.print("Valinnan taytyy olla numero!");
             io.print("Paina (Enter)");
             io.getInput();
         }

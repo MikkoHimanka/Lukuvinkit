@@ -23,7 +23,7 @@ public class EditBook extends Command {
             return false;
         }
         if (dao.updateBook(book)) {
-            io.print("Lukuvinkin tiedot päivitetty onnistuneesti.");
+            io.print("Lukuvinkin tiedot paivitetty onnistuneesti.");
             return true;
         }
         io.print("Lukuvinkin tietojen muokkaus ei onnistunut!");
@@ -32,7 +32,7 @@ public class EditBook extends Command {
 
     @Override
     public void actionQuestion() {
-        io.print("Mitä lukuvinkkiä muokataan?\n");
+        io.print("Mita lukuvinkkia muokataan?\n");
     }
 
     public Book chooseProperty(Book book) {
@@ -41,7 +41,7 @@ public class EditBook extends Command {
         loop:
         while (true) {
             io.print("Valitse muokattava ominaisuus:");
-            io.print("Muokkaa (L)inkkiä");
+            io.print("Muokkaa (L)inkkia");
             io.print("Muokkaa (O)tsikkoa");
             io.print("Muokkaa (K)uvausta");
             io.print("Takaisin (V)alintaan");
