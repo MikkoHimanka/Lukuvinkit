@@ -30,7 +30,7 @@ public class AppTest {
     private Search search;
     private StubNetworkConnection connection;
     private URLVerifier verifier;
-    private BookApi bookApi;
+    private StubApi bookApi;
 
     @Before
     public void initDb() throws SQLException {
@@ -106,18 +106,19 @@ public class AppTest {
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
+        assertEquals(out.size(), 12);
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
         assertEquals(out.get(1), "Komennot:");
         assertEquals(out.get(2), "(L)isaa uusi lukuvinkki");
-        assertEquals(out.get(3), "(N)ayta tallennetut lukuvinkit");
-        assertEquals(out.get(4), "(M)erkitse lukuvinkki luetuksi");
-        assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(6), "(E)tsi lukuvinkkeja");
-        assertEquals(out.get(7), "(P)oista lukuvinkki");
-        assertEquals(out.get(8), "(Mu)okkaa lukuvinkkia");
-        assertEquals(out.get(9), "(S)ulje sovellus");      
-        assertEquals(out.get(10), "Kiitos kaynnista, sovellus sulkeutuu.");
-        assertEquals(out.size(), 11);
+        assertEquals(out.get(3), "(I)sbn-tunnuksen avulla lisaaminen");
+        assertEquals(out.get(4), "(N)ayta tallennetut lukuvinkit");
+        assertEquals(out.get(5), "(M)erkitse lukuvinkki luetuksi");
+        assertEquals(out.get(6), "(Li)staa lukemattomat lukuvinkit");
+        assertEquals(out.get(7), "(E)tsi lukuvinkkeja");
+        assertEquals(out.get(8), "(P)oista lukuvinkki");
+        assertEquals(out.get(9), "(Mu)okkaa lukuvinkkia");
+        assertEquals(out.get(10), "(S)ulje sovellus");
+        assertEquals(out.get(11), "Kiitos kaynnista, sovellus sulkeutuu.");
     }
 
     @Test
@@ -127,28 +128,31 @@ public class AppTest {
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
+        assertEquals(out.size(), 23);
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
         assertEquals(out.get(1), "Komennot:");
         assertEquals(out.get(2), "(L)isaa uusi lukuvinkki");
-        assertEquals(out.get(3), "(N)ayta tallennetut lukuvinkit");
-        assertEquals(out.get(4), "(M)erkitse lukuvinkki luetuksi");
-        assertEquals(out.get(5), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(6), "(E)tsi lukuvinkkeja");
-        assertEquals(out.get(7), "(P)oista lukuvinkki");
-        assertEquals(out.get(8), "(Mu)okkaa lukuvinkkia");
-        assertEquals(out.get(9), "(S)ulje sovellus");
-        assertEquals(out.get(10), "Lukuvinkkeja ei loytynyt.");
-        assertEquals(out.get(11), "Komennot:");
-        assertEquals(out.get(12), "(L)isaa uusi lukuvinkki");
-        assertEquals(out.get(13), "(N)ayta tallennetut lukuvinkit");
-        assertEquals(out.get(14), "(M)erkitse lukuvinkki luetuksi");
-        assertEquals(out.get(15), "(Li)staa lukemattomat lukuvinkit");
-        assertEquals(out.get(16), "(E)tsi lukuvinkkeja");
-        assertEquals(out.get(17), "(P)oista lukuvinkki");
-        assertEquals(out.get(18), "(Mu)okkaa lukuvinkkia");
-        assertEquals(out.get(19), "(S)ulje sovellus");
-        assertEquals(out.get(20), "Kiitos kaynnista, sovellus sulkeutuu.");
-        assertEquals(out.size(), 21);
+        assertEquals(out.get(3), "(I)sbn-tunnuksen avulla lisaaminen");
+        assertEquals(out.get(4), "(N)ayta tallennetut lukuvinkit");
+        assertEquals(out.get(5), "(M)erkitse lukuvinkki luetuksi");
+        assertEquals(out.get(6), "(Li)staa lukemattomat lukuvinkit");
+        assertEquals(out.get(7), "(E)tsi lukuvinkkeja");
+        assertEquals(out.get(8), "(P)oista lukuvinkki");
+        assertEquals(out.get(9), "(Mu)okkaa lukuvinkkia");
+        assertEquals(out.get(10), "(S)ulje sovellus");
+        assertEquals(out.get(11), "Lukuvinkkeja ei loytynyt.");
+        assertEquals(out.get(12), "Komennot:");
+        assertEquals(out.get(13), "(L)isaa uusi lukuvinkki");
+        assertEquals(out.get(14), "(I)sbn-tunnuksen avulla lisaaminen");
+        assertEquals(out.get(15), "(N)ayta tallennetut lukuvinkit");
+        assertEquals(out.get(16), "(M)erkitse lukuvinkki luetuksi");
+        assertEquals(out.get(17), "(Li)staa lukemattomat lukuvinkit");
+        assertEquals(out.get(18), "(E)tsi lukuvinkkeja");
+        assertEquals(out.get(19), "(P)oista lukuvinkki");
+        assertEquals(out.get(20), "(Mu)okkaa lukuvinkkia");
+        assertEquals(out.get(21), "(S)ulje sovellus");
+        assertEquals(out.get(22), "Kiitos kaynnista, sovellus sulkeutuu.");
+
     }
 
     @Test
@@ -158,7 +162,7 @@ public class AppTest {
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
-        assertEquals(out.get(10), "Virhe: komento oli puutteellinen!");
+        assertEquals(out.get(11), "Virhe: komento oli puutteellinen!");
     }
 
     @Test
@@ -231,6 +235,44 @@ public class AppTest {
         assertEquals("Haluatko varmasti lisata linkin (k/E)?", out.get(2));
         assertEquals("Lukuvinkin lisays ei onnistunut!", out.get(3));
         assertEquals(0, sqliteDb.findByTitle("iltasanomat urheilu").size());
+    }
+
+    @Test
+    public void testCreateFromIsbnValid() {
+        Book book = new Book("x", "y");
+        bookApi.addBook(book);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("9780134092669");
+        io.addInput("k");
+        app.createFromIsbn();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 6);
+        assertEquals(out.get(0), "Anna kirjan isbn-tunnus:");
+        assertEquals(out.get(1), "Loytyi kirja tiedoilla:");
+        assertEquals(out.get(2), "Linkki: x");
+        assertEquals(out.get(3), "Otsikko: y");
+    }
+
+    @Test
+    public void testCreateFromIsbnWithoutApiKey() {
+        bookApi.setKey(false);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.createFromIsbn();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 1);
+        assertEquals(out.get(0), "Et ole asettanut ymparistomuuttujaa!");
+    }
+
+    @Test
+    public void testCreateFromIsbnWithoutBook() {
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("x");
+        app.createFromIsbn();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 3);
+        assertEquals(out.get(0), "Anna kirjan isbn-tunnus:");
+        assertEquals(out.get(1), "Kirjan hakeminen epaonnistui!");
+        assertEquals(out.get(2), "Tarkista etta isbn-tunnus on annettu oikein");
     }
 
     @After
