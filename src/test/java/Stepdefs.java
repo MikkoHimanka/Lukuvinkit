@@ -55,12 +55,12 @@ public class Stepdefs {
         sqliteDb = new SqliteBookDao("test.db");
     }
 
-    @When("tietokantaan tallennetaan kaksi lukuvinkkia")
+    @When("tietokantaan tallennetaan kaksi lukuvinkkiä")
     public void addExampleBooks() {
         initializeBooks();
     }
 
-    @When("valitaan komento {string} ja syotetaan linkki {string} seka otsikko {string}, eika syoteta tageja tietoja pyydettaessa")
+    @When("valitaan komento {string} ja syötetään linkki {string} sekä otsikko {string}, eikä syötetä tagejä tietoja pyydettäessä")
     public void linkAndTitleAreEntered(String command, String link, String title) {
         ioStub.addInput(command);
         ioStub.addInput(link);
@@ -79,7 +79,7 @@ public class Stepdefs {
         app.switchContext();
     }
 
-    @When("valitaan komento {string} ja syotetaan linkki {string} linkkia pyydettaessa")
+    @When("valitaan komento {string} ja syötetään linkki {string} linkkiä pyydettäessä")
     public void invalidLinkAndTitleAreEntered(String command, String link) {
         ioStub.addInput(command);
         ioStub.addInput(link);
@@ -98,7 +98,7 @@ public class Stepdefs {
         app.switchContext();
     }
 
-    @When("merkataan lukuvinkit luetuiksi valitsemalla komennot {string}, {string} ja {string} seka {string}")
+    @When("merkataan lukuvinkit luetuiksi valitsemalla komennot {string}, {string} ja {string} sekä {string}")
     public void booksAreMarkedAsRead(String cmd1, String cmd2, String cmd3, String cmd4) {
         ioStub.addInput(cmd1);
         ioStub.addInput(cmd2);
@@ -109,13 +109,13 @@ public class Stepdefs {
         app.switchContext();
     }
 
-    @Then("sovellus hyvaksyy syotteet ja tulostaa {string}")
+    @Then("sovellus hyväksyy syötteet ja tulostaa {string}")
     public void bookIsAddedToList(String print) throws SQLException {
         List<String> out = ioStub.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
-        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");
         assertTrue(out.contains(print));
-        assertTrue(out.contains("Lisaa otsikko:"));
+        assertTrue(out.contains("Lisää otsikko:"));
         deleteFile();
     }
 
@@ -123,7 +123,7 @@ public class Stepdefs {
     public void systemPrints(String print) throws SQLException {
         List<String> out = ioStub.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
-        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");
         assertTrue(out.contains(print));
         deleteFile();
     }
@@ -132,7 +132,7 @@ public class Stepdefs {
     public void systemListsBooks() {
         List<String> out = ioStub.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
-        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");;
+        assertEquals(out.get(out.size() - 1), "Kiitos käynnistä, sovellus sulkeutuu.");;
         assertTrue(out.contains("Linkki: www.bing.com"));
         assertTrue(out.contains("Linkki: www.bing.com"));
         assertTrue(out.contains("Linkki: www.is.fi"));
