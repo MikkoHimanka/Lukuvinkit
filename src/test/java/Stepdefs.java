@@ -66,6 +66,7 @@ public class Stepdefs {
         ioStub.addInput(link);
         ioStub.addInput(title);
         ioStub.addInput("");
+        ioStub.addInput("");
         ioStub.addInput("s");
         app = new App(sqliteDb, ioStub, search, verifier);
         app.switchContext();

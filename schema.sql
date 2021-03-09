@@ -10,3 +10,9 @@ CREATE TABLE IF NOT EXISTS Tags (
     book_id INTEGER,
     tag TEXT
 );
+
+CREATE TABLE IF NOT EXISTS Descriptions (
+    id INTEGER PRIMARY KEY,
+    book_id INTEGER,
+    description TEXT
+);

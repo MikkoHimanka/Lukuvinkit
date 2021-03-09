@@ -74,6 +74,9 @@ public abstract class BookList {
         if (!(book.getTitle().isEmpty())) {
             io.print("Otsikko: " + book.getTitle());
         }
+        if (book.getDescription() != null) {
+            io.print("Kuvaus: " + book.getDescription());
+        }
     }
 
     public static Book choose(List<Book> books, IO io) {

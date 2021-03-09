@@ -38,6 +38,13 @@ public class SqliteBookDao implements BookDao {
             r.next();
             book.setId(r.getInt(1));
 
+            if (book.getDescription() != null) {
+                p = this.db.prepareStatement("INSERT INTO Descriptions (book_id, description) VALUES (?, ?)");
+                p.setInt(1, book.getId());
+                p.setString(2, book.getDescription());
+                p.execute();
+            }
+
             return book;
         } catch (Exception e) {
             return null;
@@ -60,12 +67,15 @@ public class SqliteBookDao implements BookDao {
     public List<Book> getAll() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT id, link, title FROM Books");
+            ResultSet r = s.executeQuery("SELECT b.id, b.link, b.title, d.description " +
+                    "FROM Books b " +
+                    "LEFT JOIN Descriptions d " +
+                    "ON b.id = d.book_id");
 
             List<Book> books = new ArrayList<>();
 
             while (r.next()) {
-                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
+                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id"), r.getString("description")));
             }
 
             return books;
@@ -78,7 +88,8 @@ public class SqliteBookDao implements BookDao {
     public List<Book> getUnread() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT id, link, title FROM Books WHERE markedRead=0");
+            ResultSet r = s.executeQuery("SELECT b.id, b.link, b.title FROM Books b " +
+                    "LEFT JOIN Descriptions d ON b.id = d.book_id WHERE b.markedRead=0");
 
             return formList(r);
         } catch (Exception e) {
@@ -213,5 +224,48 @@ public class SqliteBookDao implements BookDao {
             Statement statement = this.db.createStatement();
             statement.executeUpdate(getSchema());
         } catch (Exception ignored) { }
+    }
+
+    public void updateDescription(Book book) {
+        try {
+            int id = book.getId();
+            PreparedStatement p;
+            if (getDescription(id) == null) {
+                p = this.db.prepareStatement(
+                        "INSERT INTO Descriptions (book_id, description) VALUES (?, ?)"
+                );
+                p.setInt(1, id);
+                p.setString(2, book.getDescription());
+            } else {
+                p = this.db.prepareStatement(
+                        "UPDATE Descriptions " +
+                                "SET description = ? " +
+                                "WHERE book_id = ?"
+                );
+                p.setString(1, book.getDescription());
+                p.setInt(2, id);
+            }
+            p.execute();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public String getDescription(int id) {
+        try {
+            PreparedStatement p  = this.db.prepareStatement(
+                    "SELECT description FROM Descriptions WHERE book_id = ?"
+            );
+            p.setInt(1, id);
+            ResultSet r = p.executeQuery();
+
+            if (r.next()) {
+                return r.getString("description");
+            }
+
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

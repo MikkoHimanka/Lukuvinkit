@@ -140,12 +140,32 @@ public class SqliteBookDaoTest {
         assertEquals(t.get(2), "3");
     }
 
+    @Test
+    public void testDescriptionsOnCreate() {
+        Book book = new Book("link", "title", "desc");
+        book = sqliteDb.create(book);
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.get(0).getDescription(), "desc");
+    }
+
+    @Test
+    public void testDescriptionsOnModify() {
+        Book book = new Book("link", "title", "desc");
+        book = sqliteDb.create(book);
+        book.setDescription("desc2");
+        sqliteDb.updateDescription(book);
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.get(0).getDescription(), "desc2");
+    }
+
     @After
     public void deleteFile() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+        /*Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
-        s.execute("DROP TABLE Books;");
-        conn.close();
+        s.execute("DROP TABLE Books");
+        s.execute("DROP TABLE Tags");
+        s.execute("DROP TABLE Descriptions");
+        conn.close();*/
         File db = new File("test.db");
         db.delete();
     }
