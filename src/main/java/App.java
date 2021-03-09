@@ -122,7 +122,8 @@ public class App {
             io.print("\n(V)alitse");
             io.print("(T)arkenna hakuehtojasi");
             io.print("Takaisin (P)aavalikkoon");
-            if (switchOptions(bookList, command) == null) {
+            bookList = switchOptions(bookList, command);
+            if (bookList == null) {
                 return;
             }
         }
