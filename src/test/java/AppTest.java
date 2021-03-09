@@ -179,6 +179,17 @@ public class AppTest {
     }
 
     @Test
+    public void testFindByTitleFindsBooksWithoutTitle() {
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("");
+        app.findByTitle();
+        List<String> out = io.getPrints();
+        assertEquals(out.size(), 4);
+        assertEquals(out.get(2), "Haku ei onnistunut!");
+        assertEquals(out.get(3), "Hakuparametri ei voi olla tyhja");
+    }
+
+    @Test
     public void testFindByTitleDoesntFindBooksWithBadKeyword() {
         sqliteDb.create(new Book("link", "title"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
