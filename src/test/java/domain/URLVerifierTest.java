@@ -85,7 +85,7 @@ public class URLVerifierTest {
         List<String> out = io.getPrints();
         assertEquals("Annettu linkki kelpaa.", out.get(0));
         assertEquals("Annetun linkin formaatti ei kelpaa.", out.get(1));
-        assertEquals("Annetun linkin sisältöä ei ole saatavilla.", out.get(2));
-        assertEquals("Internet-yhteyden luonti epäonnistui: Linkin oikeellisuus epävarmaa.", out.get(3));
+        assertEquals("Annetun linkin sisaltoa ei ole saatavilla.", out.get(2));
+        assertEquals("Internet-yhteyden luonti epaonnistui: Linkin oikeellisuus epavarmaa.", out.get(3));
     }
 }

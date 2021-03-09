@@ -45,10 +45,10 @@ public class URLVerifier {
                 io.print("Annetun linkin formaatti ei kelpaa.");
                 break;
             case NOT_EXISTING:
-                io.print("Annetun linkin sisältöä ei ole saatavilla.");
+                io.print("Annetun linkin sisaltoa ei ole saatavilla.");
                 break;
             case NETWORK_UNREACHABLE:
-                io.print("Internet-yhteyden luonti epäonnistui: Linkin oikeellisuus epävarmaa.");
+                io.print("Internet-yhteyden luonti epaonnistui: Linkin oikeellisuus epavarmaa.");
                 break;
             default:
               throw new IllegalArgumentException("Unhandled enum value");

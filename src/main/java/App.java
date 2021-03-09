@@ -46,50 +46,50 @@ public class App {
     }
 
     public void createBook() {
-        io.print("Lisää linkki: (pakollinen)");
+        io.print("Lisaa linkki: (pakollinen)");
         String link = io.getInput();
         URLVerificationResult verificationResult = urlVerifier.verify(link);
         URLVerifier.printVerificationResult(verificationResult, io);
         if (verificationResult == URLVerificationResult.NETWORK_UNREACHABLE) {
             if (!confirmLinkAddition()) {
-                io.print("Lukuvinkin lisäys ei onnistunut!");
+                io.print("Lukuvinkin lisays ei onnistunut!");
                 return;
             }
         } else if (verificationResult != URLVerificationResult.OK) {
-            io.print("Lukuvinkin lisäys ei onnistunut!");
+            io.print("Lukuvinkin lisays ei onnistunut!");
             return;
         }
-        io.print("Lisää otsikko:");
+        io.print("Lisaa otsikko:");
         String title = io.getInput();
-        io.print("Lisää tagit pilkulla eroteltuna:");
+        io.print("Lisaa tagit pilkulla eroteltuna:");
         String tagString = io.getInput();
         String[] tags = tagString.split(",");
 
         Book result = dao.create(new Book(link, title));
         if (result != null) {
-            io.print("Lukuvinkki lisätty onnistuneesti");
+            io.print("Lukuvinkki lisatty onnistuneesti");
             if (tagString.length() != 0) {
                 boolean res = dao.addTags(result, Arrays.asList(tags));
                 if (res) {
-                    io.print("Tagien lisäys onnistui");
+                    io.print("Tagien lisays onnistui");
                 } else {
-                    io.print("Tagien lisäys epäonnistui");
+                    io.print("Tagien lisays epaonnistui");
                 }
             }
         } else {
-            io.print("Lukuvinkin lisäys ei onnistunut!");
+            io.print("Lukuvinkin lisays ei onnistunut!");
         }
     }
 
     private boolean confirmLinkAddition() {
-        io.print("Haluatko varmasti lisätä linkin (k/E)?");
+        io.print("Haluatko varmasti lisata linkin (k/E)?");
         String input = io.getInput().toLowerCase();
         return input.equals("k");
     }
 
     private List<Book> searchValidBooks(List<Book> bookList) {
         while (bookList.size() > 5) {
-            io.print("Löytyi " + bookList.size() + " lukuvinkkiä");
+            io.print("Loytyi " + bookList.size() + " lukuvinkkia");
             bookList = BookList.narrowingSearch(bookList, io);
             if (bookList == null) {
                 return null;
@@ -100,7 +100,7 @@ public class App {
 
     private void findCorrectBook(List<Book> bookList, Command command) {
         if (bookList == null || bookList.isEmpty()) {
-            io.print("Lukuvinkkejä ei löytynyt.");
+            io.print("Lukuvinkkeja ei loytynyt.");
             return;
         }
         while (true) {
@@ -112,7 +112,7 @@ public class App {
             BookList.printBooksWithNumbers(bookList, io);
             io.print("\n(V)alitse");
             io.print("(T)arkenna hakuehtojasi");
-            io.print("Takaisin (P)äävalikkoon");
+            io.print("Takaisin (P)aavalikkoon");
             if (switchOptions(bookList, command) == null) {
                 return;
             }
@@ -125,7 +125,7 @@ public class App {
         }
         switch (bookList.size()) {
             case 0:
-                io.print("Lukuvinkkejä ei löytynyt annetulla haulla.");
+                io.print("Lukuvinkkeja ei loytynyt annetulla haulla.");
                 return null;
             case 1:
                 command.run(bookList.get(0));
@@ -175,12 +175,12 @@ public class App {
     }
 
     public void findByTitle() {
-        io.print("Etsi lukuvinkkejä otsikon perusteella");
+        io.print("Etsi lukuvinkkeja otsikon perusteella");
         io.print("Anna hakuparametri");
         String title = io.getInput();
         if (title.isEmpty()) {
             io.print("Haku ei onnistunut!");
-            io.print("Hakuparametri ei voi olla tyhjä");
+            io.print("Hakuparametri ei voi olla tyhja");
             return;
         }
         listByTitle(title);
@@ -209,7 +209,7 @@ public class App {
                     listAllUnread();
                     break;
                 case "s":
-                    io.print("Kiitos käynnistä, sovellus sulkeutuu.");
+                    io.print("Kiitos kaynnista, sovellus sulkeutuu.");
                     break loop;
                 case "p":
                     removeBook();
@@ -227,13 +227,13 @@ public class App {
 
     public void switchMessage() {
         io.print("Komennot:");
-        io.print("(L)isää uusi lukuvinkki");
-        io.print("(N)äytä tallennetut lukuvinkit");
+        io.print("(L)isaa uusi lukuvinkki");
+        io.print("(N)ayta tallennetut lukuvinkit");
         io.print("(M)erkitse lukuvinkki luetuksi");
         io.print("(Li)staa lukemattomat lukuvinkit");
-        io.print("(E)tsi lukuvinkkejä");
+        io.print("(E)tsi lukuvinkkeja");
         io.print("(P)oista lukuvinkki");
-        io.print("(Mu)okkaa lukuvinkkiä");
+        io.print("(Mu)okkaa lukuvinkkia");
         io.print("(S)ulje sovellus");
     }
 }

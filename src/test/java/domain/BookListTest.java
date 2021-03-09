@@ -19,7 +19,7 @@ public class BookListTest {
         io = new StubIO();
         this.books = new ArrayList<>();
         this.books.add(new Book("www.url.com", "Kuusipuu", 0));
-        this.books.add(new Book("www.orkki.com", "Örkki", 1));
+        this.books.add(new Book("www.orkki.com", "orkki", 1));
         this.books.add(new Book("www.kukkakauppa.com", "Kukkakauppa", 2));
         this.books.add(new Book("www.abcdefg.com", "abcdefg", 3));
         this.books.add(new Book("www.qwerty.se", "QwErTy", 4));
