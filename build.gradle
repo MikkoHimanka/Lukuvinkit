@@ -17,6 +17,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
     compile 'io.github.cdimascio:java-dotenv:5.2.2'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 test {
