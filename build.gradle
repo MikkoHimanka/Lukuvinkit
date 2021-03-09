@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'jacoco'
+	id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 repositories {
@@ -23,7 +24,7 @@ test {
 }
 
 application {
-    mainClass = 'Main'
+    mainClassName = 'Main'
 }
 
 run {
