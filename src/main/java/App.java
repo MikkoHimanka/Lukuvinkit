@@ -12,6 +12,7 @@ import domain.Search;
 import io.IO;
 import domain.URLVerifier;
 import domain.URLVerificationResult;
+import isbn.BookApi;
 
 public class App {
 
@@ -19,12 +20,14 @@ public class App {
     private final IO io;
     private final Search search;
     private final URLVerifier urlVerifier;
+    private final BookApi bookApi;
 
-    public App(BookDao dao, IO io, Search search, URLVerifier urlVerifier) {
+    public App(BookDao dao, IO io, Search search, URLVerifier urlVerifier, BookApi bookApi) {
         this.dao = dao;
         this.io = io;
         this.search = search;
         this.urlVerifier = urlVerifier;
+        this.bookApi = bookApi;
     }
 
     public void listAll() {

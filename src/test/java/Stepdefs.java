@@ -9,6 +9,9 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import isbn.BookApi;
+import isbn.StubApi;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,11 +31,13 @@ public class Stepdefs {
     SqliteBookDao sqliteDb;
     Search search;
     URLVerifier verifier;
+    BookApi bookApi;
 
     @Before
     public void setup() {
         ioStub = new StubIO();
         search = new Search(3.0);
+        bookApi = new StubApi();
     }
 
     @Before
@@ -68,7 +73,7 @@ public class Stepdefs {
         ioStub.addInput("");
         ioStub.addInput("");
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier);
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
     }
 
@@ -76,7 +81,7 @@ public class Stepdefs {
     public void commandIsEntered(String command) {
         ioStub.addInput(command);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier);
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
     }
 
@@ -85,7 +90,7 @@ public class Stepdefs {
         ioStub.addInput(command);
         ioStub.addInput(link);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier);
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
     }
 
@@ -95,7 +100,7 @@ public class Stepdefs {
         ioStub.addInput(cmd2);
         ioStub.addInput(cmd3);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier);
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
     }
 
@@ -106,7 +111,7 @@ public class Stepdefs {
         ioStub.addInput(cmd3);
         ioStub.addInput(cmd4);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier);
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
     }
 

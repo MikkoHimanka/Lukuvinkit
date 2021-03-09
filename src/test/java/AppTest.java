@@ -4,6 +4,8 @@ import domain.Search;
 import domain.URLVerifier;
 import io.StubIO;
 import io.StubNetworkConnection;
+import isbn.BookApi;
+import isbn.StubApi;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +30,7 @@ public class AppTest {
     private Search search;
     private StubNetworkConnection connection;
     private URLVerifier verifier;
+    private BookApi bookApi;
 
     @Before
     public void initDb() throws SQLException {
@@ -35,13 +38,10 @@ public class AppTest {
     }
 
     @Before
-    public void initIO() {
+    public void init() {
         io = new StubIO();
-    }
-
-    @Before
-    public void initSearch() {
         search = new Search(3.0);
+        bookApi = new StubApi();
     }
 
     @Before
@@ -58,7 +58,7 @@ public class AppTest {
 
     @Test
     public void testListAllEmpty() {
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAll();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Lukuvinkkeja ei loytynyt.");
@@ -69,7 +69,7 @@ public class AppTest {
     public void testListAllSimple() {
         sqliteDb.create(new Book("link", "title"));
         sqliteDb.create(new Book("www.google.com", "haku"));
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAll();
         List<String> out = io.getPrints();
 
@@ -89,7 +89,7 @@ public class AppTest {
         sqliteDb.create(new Book("link", "title", 1));
         sqliteDb.create(new Book("www.google.com", "haku", 2));
         sqliteDb.setRead(new Book("link", "title", 1));
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAllUnread();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Loytyi 1 lukuvinkkia:");
@@ -103,7 +103,7 @@ public class AppTest {
     @Test
     public void testSwichContextWelcomeAndExit() {
         io.addInput("s");
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
@@ -124,7 +124,7 @@ public class AppTest {
     public void testSwichContextListAllAndExit() {
         io.addInput("n");
         io.addInput("s");
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
@@ -155,7 +155,7 @@ public class AppTest {
     public void testSwichContextFailedCommand() {
         io.addInput("lol");
         io.addInput("s");
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.switchContext();
         List<String> out = io.getPrints();
         assertEquals(out.get(10), "Virhe: komento oli puutteellinen!");
@@ -164,7 +164,7 @@ public class AppTest {
     @Test
     public void testFindByTitleFindsBooksWithKeyword() {
         sqliteDb.create(new Book("link", "title"));
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("itl");
         app.findByTitle();
         io.getInput();
@@ -177,7 +177,7 @@ public class AppTest {
     @Test
     public void testFindByTitleDoesntFindBooksWithBadKeyword() {
         sqliteDb.create(new Book("link", "title"));
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("lepakko");
         app.findByTitle();
         io.getInput();
@@ -189,7 +189,7 @@ public class AppTest {
 
     @Test
     public void testCreateInvalidLink() {
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         connection.setConnectionStatus(false);
         io.addInput("");
         app.createBook();
@@ -201,7 +201,7 @@ public class AppTest {
 
     @Test
     public void testCreateBookWithoutInternet() {
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         connection.setConnectionStatus(false);
         io.addInput("https://is.fi");
         io.addInput("k");
@@ -220,7 +220,7 @@ public class AppTest {
 
     @Test
     public void testCreateBookWithoutInternetCancel() {
-        App app = new App(sqliteDb, io, search, verifier);
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
         connection.setConnectionStatus(false);
         io.addInput("https://is.fi");
         io.addInput("n");
