@@ -1,16 +1,16 @@
-Feature: Käyttäjänä voin lisätä uuden lukuvinkin linkin ja otsikon
+Feature: Kayttajana voin lisata uuden lukuvinkin linkin ja otsikon
 
-Scenario: lukuvinkin lisäys onnistuu kun syötetään toimiva linkki ja otsikko
+Scenario: lukuvinkin lisays onnistuu kun syotetaan toimiva linkki ja otsikko
     Given tietokanta on alustettu
-    When  valitaan komento "L" ja syötetään linkki "www.is.fi" sekä otsikko "lehti", eikä syötetä tagejä tietoja pyydettäessä
-    Then  sovellus hyväksyy syötteet ja tulostaa "Lukuvinkki lisätty onnistuneesti"
+    When  valitaan komento "L" ja syotetaan linkki "www.is.fi" seka otsikko "lehti", eika syoteta tageja tietoja pyydettaessa
+    Then  sovellus hyvaksyy syotteet ja tulostaa "Lukuvinkki lisatty onnistuneesti"
 
-Scenario: lukuvinkin lisäys onnistuu kun syötetään toimiva linkki ja tyhjä otsikko
+Scenario: lukuvinkin lisays onnistuu kun syotetaan toimiva linkki ja tyhja otsikko
     Given tietokanta on alustettu
-    When  valitaan komento "L" ja syötetään linkki "www.is.fi" sekä otsikko "", eikä syötetä tagejä tietoja pyydettäessä
-    Then  sovellus hyväksyy syötteet ja tulostaa "Lukuvinkki lisätty onnistuneesti"
+    When  valitaan komento "L" ja syotetaan linkki "www.is.fi" seka otsikko "", eika syoteta tageja tietoja pyydettaessa
+    Then  sovellus hyvaksyy syotteet ja tulostaa "Lukuvinkki lisatty onnistuneesti"
 
-Scenario: lukuvinkin lisäys ei onnistu kun syötetään epäkelpo linkki
+Scenario: lukuvinkin lisays ei onnistu kun syotetaan epakelpo linkki
     Given tietokanta on alustettu
-    When  valitaan komento "L" ja syötetään linkki "oispa kaljaa" linkkiä pyydettäessä
-    Then  sovellus tulostaa "Lukuvinkin lisäys ei onnistunut!"
+    When  valitaan komento "L" ja syotetaan linkki "oispa kaljaa" linkkia pyydettaessa
+    Then  sovellus tulostaa "Lukuvinkin lisays ei onnistunut!"

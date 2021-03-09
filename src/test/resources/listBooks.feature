@@ -1,14 +1,14 @@
-Feature: Käyttäjänä voin lukea listan lukuvinkeista
+Feature: Kayttajana voin lukea listan lukuvinkeista
 
-Scenario: sovellus ilmoittaa jos tietokantaan ei ole tallennettu lukuvinkkejä
+Scenario: sovellus ilmoittaa jos tietokantaan ei ole tallennettu lukuvinkkeja
     Given tietokanta on alustettu
     When  valitaan komento "N"
-    Then  sovellus tulostaa "Lukuvinkkejä ei löytynyt."
+    Then  sovellus tulostaa "Lukuvinkkeja ei loytynyt."
 
 Scenario: sovellus listaa olemassaolevat lukuvinkit
     Given tietokanta on alustettu
-    When  tietokantaan tallennetaan kaksi lukuvinkkiä
-    And   valitaan komento "L" ja syötetään linkki "www.is.fi" sekä otsikko "lehti", eikä syötetä tagejä tietoja pyydettäessä
+    When  tietokantaan tallennetaan kaksi lukuvinkkia
+    And   valitaan komento "L" ja syotetaan linkki "www.is.fi" seka otsikko "lehti", eika syoteta tageja tietoja pyydettaessa
     And   valitaan komento "N"
-    Then  sovellus tulostaa "Löytyi 3 lukuvinkkiä:"
+    Then  sovellus tulostaa "Loytyi 3 lukuvinkkia:"
     Then  sovellus listaa lukuvinkit

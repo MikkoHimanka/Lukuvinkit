@@ -20,6 +20,6 @@ public class MarkBook extends Command {
     
     @Override
     public void actionQuestion() {
-        io.print("Mikä lukuvinkki merkitään luetuksi?\n");
+        io.print("Mika lukuvinkki merkitaan luetuksi?\n");
     }
 }
