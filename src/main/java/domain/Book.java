@@ -4,6 +4,7 @@ public class Book {
     private String link;
     private String title;
     private int id;
+    private String description;
 
     public Book(String link) {
         this.link = link;
@@ -17,6 +18,12 @@ public class Book {
     public Book(String link, String title, int id) {
         this(link, title);
         this.id = id;
+    }
+
+    public Book(String link, String title, int id, String description) {
+        this(link, title);
+        this.id = id;
+        this.description = description;
     }
 
     public void setId(int id) {
@@ -41,5 +48,13 @@ public class Book {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

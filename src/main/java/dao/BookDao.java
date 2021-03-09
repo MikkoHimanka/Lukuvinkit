@@ -2,6 +2,7 @@ package dao;
 
 import domain.Book;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface BookDao {
@@ -15,4 +16,5 @@ public interface BookDao {
     boolean addTags(Book book, List<String> tags);
     List<Book> findByTag(String tag);
     List<String> findTagsByBook(Book book);
+    void updateDescription(Book book);
 }

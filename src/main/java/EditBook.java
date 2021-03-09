@@ -43,6 +43,7 @@ public class EditBook extends Command {
             io.print("Valitse muokattava ominaisuus:");
             io.print("Muokkaa (L)inkkiä");
             io.print("Muokkaa (O)tsikkoa");
+            io.print("Muokkaa (K)uvausta");
             io.print("Takaisin (V)alintaan");
             String input = io.getInput().toLowerCase();
 
@@ -63,6 +64,11 @@ public class EditBook extends Command {
                     break loop;
                 case ("v"):
                     return null;
+                case ("k"):
+                    io.print("Anna uusi kuvaus:");
+                    book.setDescription(io.getInput());
+                    this.dao.updateDescription(book);
+                    break loop;
                 default:
                     io.print("Virhe: komento oli puutteellinen!\n");
                     break;
