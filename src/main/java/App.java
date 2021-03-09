@@ -69,7 +69,7 @@ public class App {
 
         Book result;
 
-        if (description.strip().equals("")) {
+        if (description.equals("")) {
             result = dao.create(new Book(link, title));
         } else {
             result = dao.create(new Book(link, title, description));
