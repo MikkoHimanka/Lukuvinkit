@@ -1,4 +1,5 @@
 import dao.SqliteBookDao;
+import domain.Book;
 import domain.Search;
 import domain.URLVerifier;
 import io.ConsoleIO;
@@ -21,9 +22,8 @@ public class Main {
         SqliteBookDao sql = new SqliteBookDao("testi.db");
         Search search = new Search(3.0);
         GoogleBookApi api = new GoogleBookApi();
-        System.out.println(api.performRequest("9780134092669"));
         App app = new App(sql, consoleIO, search, urlVerifier, api);
 
-        //app.switchContext();
+        app.switchContext();
     }
 }

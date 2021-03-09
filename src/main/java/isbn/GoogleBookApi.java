@@ -2,6 +2,10 @@ package isbn;
 
 import domain.Book;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
@@ -23,10 +27,25 @@ public class GoogleBookApi implements BookApi {
 
     @Override
     public Book getBook(String isbn) {
-        return null;
+        JSONObject data = performRequest(isbn);
+        if (data == null) return null;
+
+        String title = getTitle(data);
+        String link = getLink(data);
+        if (link == null) return null;
+
+        return new Book(link, title);
     }
 
-    public String performRequest(String isbn) {
+    private String getTitle(JSONObject blob) {
+        return (String) blob.get("title");
+    }
+
+    private String getLink(JSONObject blob) {
+        return (String) blob.get("infoLink");
+    }
+
+    private JSONObject performRequest(String isbn) {
         try {
             String baseUrl = "https://www.googleapis.com/books/v1/volumes?";
             String isbnUrl = "q=isbn%3D" + isbn;
@@ -46,9 +65,17 @@ public class GoogleBookApi implements BookApi {
 
             scanner.close();
 
-            return response.toString();
+            return parseRequest(response.toString());
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private JSONObject parseRequest(String data) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject obj = (JSONObject) parser.parse(data);
+        JSONArray array = (JSONArray) obj.get("items");
+        obj = (JSONObject) array.get(0);
+        return (JSONObject) obj.get("volumeInfo");
     }
 }
