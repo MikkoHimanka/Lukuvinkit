@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import io.NetworkConnection;
 import io.IO;
 
+import java.util.regex.Pattern;
+
 public class URLVerifier {
     private NetworkConnection connection;
     public URLVerifier(NetworkConnection connection) {
@@ -57,8 +59,12 @@ public class URLVerifier {
     // NOTE: URL doesn't really check the validity of the argument
     private List<URL> urlsFromString(String urlString) throws MalformedURLException {
         List<URL> result = new ArrayList<URL>();
+        urlString = urlString.trim();
         if (urlString.isEmpty()) {
             throw new MalformedURLException("URL cannot be empty");
+        }
+        if (!sanityCheck(urlString)) {
+            throw new MalformedURLException("URL did not pass the regex test");
         }
         try {
             result.add(new URL(urlString));
@@ -67,5 +73,12 @@ public class URLVerifier {
         result.add(new URL("http://" + urlString));
         result.add(new URL("https://" + urlString));
         return result;
+    }
+
+    private boolean sanityCheck(String url) {
+        // https:// and no further ://
+        // http:// and no further ://
+        // or no ://
+        return Pattern.matches("^(https?://)?(?!.*://).*$", url);
     }
 }
