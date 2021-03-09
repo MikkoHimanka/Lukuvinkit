@@ -146,7 +146,16 @@ public class SqliteBookDaoTest {
         book = sqliteDb.create(book);
         List<Book> books = sqliteDb.getAll();
         assertEquals(books.get(0).getDescription(), "desc");
+    }
 
+    @Test
+    public void testDescriptionsOnModify() {
+        Book book = new Book("link", "title", "desc");
+        book = sqliteDb.create(book);
+        book.setDescription("desc2");
+        sqliteDb.updateDescription(book);
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.get(0).getDescription(), "desc2");
     }
 
     @After
