@@ -140,6 +140,15 @@ public class SqliteBookDaoTest {
         assertEquals(t.get(2), "3");
     }
 
+    @Test
+    public void testDescriptionsOnCreate() {
+        Book book = new Book("link", "title", "desc");
+        book = sqliteDb.create(book);
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.get(0).getDescription(), "desc");
+
+    }
+
     @After
     public void deleteFile() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");

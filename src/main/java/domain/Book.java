@@ -20,6 +20,11 @@ public class Book {
         this.id = id;
     }
 
+    public Book(String link, String title, String description) {
+        this(link, title);
+        this.description = description;
+    }
+
     public Book(String link, String title, int id, String description) {
         this(link, title);
         this.id = id;

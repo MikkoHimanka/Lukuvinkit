@@ -38,6 +38,13 @@ public class SqliteBookDao implements BookDao {
             r.next();
             book.setId(r.getInt(1));
 
+            if (book.getDescription() != null) {
+                p = this.db.prepareStatement("INSERT INTO Descriptions (book_id, description) VALUES (?, ?)");
+                p.setInt(1, book.getId());
+                p.setString(2, book.getDescription());
+                p.execute();
+            }
+
             return book;
         } catch (Exception e) {
             return null;

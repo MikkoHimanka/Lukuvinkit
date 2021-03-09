@@ -61,11 +61,20 @@ public class App {
         }
         io.print("Lisää otsikko:");
         String title = io.getInput();
+        io.print("Lisää kuvaus:");
+        String description = io.getInput();
         io.print("Lisää tagit pilkulla eroteltuna:");
         String tagString = io.getInput();
         String[] tags = tagString.split(",");
 
-        Book result = dao.create(new Book(link, title));
+        Book result;
+
+        if (description.strip().equals("")) {
+            result = dao.create(new Book(link, title));
+        } else {
+            result = dao.create(new Book(link, title, description));
+        }
+
         if (result != null) {
             io.print("Lukuvinkki lisätty onnistuneesti");
             if (tagString.length() != 0) {
