@@ -13,11 +13,15 @@ import java.util.Scanner;
 
 public class GoogleBookApi implements BookApi {
 
-    private final String apiKey;
+    private String apiKey;
 
     public GoogleBookApi() {
-        Dotenv env = Dotenv.load();
-        apiKey = env.get("API_KEY");
+        try {
+            Dotenv env = Dotenv.load();
+            apiKey = env.get("API_KEY");
+        } catch (Exception ignored) {
+            apiKey = null;
+        }
     }
 
     @Override
