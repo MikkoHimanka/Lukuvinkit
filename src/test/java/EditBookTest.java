@@ -83,6 +83,17 @@ public class EditBookTest {
         assertEquals(out.get(5), "Anna uusi kuvaus:");
     }
 
+    @Test
+    public void testRunReturnsFalseWithBadParamsOrCancel() {
+        EditBook e = new EditBook(io, sqliteDb, verifier);
+        assertEquals(e.run(null), false);
+
+        Book book = new Book("1", "2", "3");
+        io.addInput("v");
+        boolean res = e.run(book);
+        assertEquals(res, false);
+    }
+
     @After
     public void deleteFile() throws SQLException {
         File db = new File("test.db");

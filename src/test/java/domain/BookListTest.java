@@ -24,6 +24,8 @@ public class BookListTest {
         this.books.add(new Book("www.abcdefg.com", "abcdefg", 3));
         this.books.add(new Book("www.qwerty.se", "QwErTy", 4));
         this.books.add(new Book("linkki", "Otsikko", 5));
+        this.books.add(new Book("123", "321", "kuvaus"));
+
     }
 
     @Test
@@ -49,5 +51,36 @@ public class BookListTest {
         io.addInput("3");
         Book chosen = BookList.choose(books, io);
         assertEquals(chosen, correct);
+    }
+
+    @Test
+    public void narrowingSearchPrintsMessageOnInvalidInput() {
+        io.addInput("x");
+        io.addInput("p");
+        books = BookList.narrowingSearch(books, io);
+        assertEquals(io.getPrints().contains("Virhe: komento oli puutteellinen!"), true);
+    }
+
+    @Test
+    public void choosePrintsMessageOnInvalidInput() {
+        io.addInput(Arrays.asList("d", "", "100"));
+        Book book = BookList.choose(books, io);
+        assertEquals(io.getPrints().contains("Valinnan taytyy olla numero!"), true);
+        assertEquals(io.getPrints().contains("Valinta oli virheellinen!"), true);
+    }
+
+    @Test
+    public void printBooksWithNumbersPrintsMessageOnEmptyList() {
+        List<Book> books2 = new ArrayList<Book>();
+        BookList.printBooksWithNumbers(books2, io);
+        assertEquals(io.getPrints().contains("Lukuvinkkeja ei loytynyt."), true);
+    }
+
+    @Test
+    public void printBookPrintsDescriptionOnlyIfFieldPopulated() {
+        BookList.printBooks(Arrays.asList(books.get(0)), io);
+        assertEquals(io.getPrints().contains("Kuvaus: "), false);
+        BookList.printBooks(Arrays.asList(books.get(6)), io);
+        assertEquals(io.getPrints().contains("Kuvaus: kuvaus"), true);
     }
 }
