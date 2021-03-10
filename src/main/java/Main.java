@@ -4,12 +4,10 @@ import domain.Search;
 import domain.URLVerifier;
 import io.ConsoleIO;
 import io.NetworkConnectionImpl;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
+import isbn.BookApi;
+import isbn.GoogleBookApi;
 
-import static org.junit.Assert.assertEquals;
+import java.net.MalformedURLException;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,7 +21,8 @@ public class Main {
         ConsoleIO consoleIO = new ConsoleIO();
         SqliteBookDao sql = new SqliteBookDao("testi.db");
         Search search = new Search(3.0);
-        App app = new App(sql, consoleIO, search, urlVerifier);
+        GoogleBookApi api = new GoogleBookApi();
+        App app = new App(sql, consoleIO, search, urlVerifier, api);
 
         app.switchContext();
     }

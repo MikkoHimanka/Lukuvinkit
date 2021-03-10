@@ -1,10 +1,7 @@
 import domain.Book;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 import dao.BookDao;
 import domain.BookList;
@@ -12,6 +9,7 @@ import domain.Search;
 import io.IO;
 import domain.URLVerifier;
 import domain.URLVerificationResult;
+import isbn.BookApi;
 
 public class App {
 
@@ -19,12 +17,14 @@ public class App {
     private final IO io;
     private final Search search;
     private final URLVerifier urlVerifier;
+    private final BookApi bookApi;
 
-    public App(BookDao dao, IO io, Search search, URLVerifier urlVerifier) {
+    public App(BookDao dao, IO io, Search search, URLVerifier urlVerifier, BookApi bookApi) {
         this.dao = dao;
         this.io = io;
         this.search = search;
         this.urlVerifier = urlVerifier;
+        this.bookApi = bookApi;
     }
 
     public void listAll() {
@@ -196,6 +196,34 @@ public class App {
         listByTitle(title);
     }
 
+    public void createFromIsbn() {
+        if (!bookApi.hasApiKey()) {
+            io.print("Et ole asettanut ymparistomuuttujaa!");
+            return;
+        }
+        io.print("Anna kirjan isbn-tunnus:");
+        String isbn = io.getInput();
+        Book book = bookApi.getBook(isbn);
+        if (book == null) {
+            io.print("Kirjan hakeminen epaonnistui!");
+            io.print("Tarkista etta isbn-tunnus on annettu oikein");
+        } else {
+            io.print("Loytyi kirja tiedoilla:");
+            io.print("Linkki: " + book.getLink());
+            io.print("Otsikko: " + book.getTitle());
+            io.print("Haluatko lisata kirjan (k/E)?");
+            String choice = io.getInput().toLowerCase();
+            if (choice.equals("k")) {
+                book = dao.create(book);
+                if (book != null) {
+                    io.print("Kirja lisattiin onnistuneesti!");
+                } else {
+                    io.print("Kirjan lisaaminen tietokantaan epaonnistui!");
+                }
+            }
+        }
+    }
+
     public void switchContext() {
         io.print("Tervetuloa Lukuvinkit-sovellukseen!\n");
         loop:
@@ -227,7 +255,9 @@ public class App {
                 case "e":
                     findByTitle();
                     break;
-
+                case "i":
+                    createFromIsbn();
+                    break;
                 default:
                     io.print("Virhe: komento oli puutteellinen!");
                     break;
@@ -238,6 +268,7 @@ public class App {
     public void switchMessage() {
         io.print("Komennot:");
         io.print("(L)isaa uusi lukuvinkki");
+        io.print("(I)sbn-tunnuksen avulla lisaaminen");
         io.print("(N)ayta tallennetut lukuvinkit");
         io.print("(M)erkitse lukuvinkki luetuksi");
         io.print("(Li)staa lukemattomat lukuvinkit");
