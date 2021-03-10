@@ -67,7 +67,6 @@ public class EditBook extends Command {
                 case ("k"):
                     io.print("Anna uusi kuvaus:");
                     book.setDescription(io.getInput());
-                    this.dao.updateDescription(book);
                     break loop;
                 default:
                     io.print("Virhe: komento oli puutteellinen!\n");

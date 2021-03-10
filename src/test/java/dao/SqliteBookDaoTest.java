@@ -143,29 +143,29 @@ public class SqliteBookDaoTest {
     @Test
     public void testDescriptionsOnCreate() {
         Book book = new Book("link", "title", "desc");
-        book = sqliteDb.create(book);
+        sqliteDb.create(book);
         List<Book> books = sqliteDb.getAll();
         assertEquals(books.get(0).getDescription(), "desc");
     }
 
     @Test
     public void testDescriptionsOnModify() {
-        Book book = new Book("link", "title", "desc");
+        Book book = new Book("link", "title", "desc1");
         book = sqliteDb.create(book);
         book.setDescription("desc2");
-        sqliteDb.updateDescription(book);
+        sqliteDb.updateBook(book);
         List<Book> books = sqliteDb.getAll();
+
         assertEquals(books.get(0).getDescription(), "desc2");
     }
 
     @After
     public void deleteFile() throws SQLException {
-        /*Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
         s.execute("DROP TABLE Books");
         s.execute("DROP TABLE Tags");
-        s.execute("DROP TABLE Descriptions");
-        conn.close();*/
+        conn.close();
         File db = new File("test.db");
         db.delete();
     }

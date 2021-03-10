@@ -2,17 +2,12 @@ CREATE TABLE IF NOT EXISTS Books (
     id INTEGER PRIMARY KEY,
     link TEXT,
     title TEXT,
-    markedRead INTEGER
+    markedRead INTEGER,
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Tags (
     id INTEGER PRIMARY KEY,
     book_id INTEGER,
     tag TEXT
-);
-
-CREATE TABLE IF NOT EXISTS Descriptions (
-    id INTEGER PRIMARY KEY,
-    book_id INTEGER,
-    description TEXT
 );

@@ -16,5 +16,4 @@ public interface BookDao {
     boolean addTags(Book book, List<String> tags);
     List<Book> findByTag(String tag);
     List<String> findTagsByBook(Book book);
-    void updateDescription(Book book);
 }
