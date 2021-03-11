@@ -45,6 +45,11 @@ public class App {
         BookList.printBooks(matching, io);
     }
 
+    public void listByTag(String tag) {
+        List<Book> result = dao.findByTag(tag);
+        BookList.printBooks(result, io);
+    }
+
     public void createBook() {
         io.print("Lisaa linkki: (pakollinen)");
         String link = io.getInput();
@@ -184,16 +189,53 @@ public class App {
         findCorrectBook(bookList, command);
     }
 
+    public void searchBooks() {
+        io.print("Valitse hakutyyppi:");
+        io.print("(O)tsikon perusteella.");
+        io.print("(T)agien perusteella.");
+        io.print("Takaisin (P)aavalikkoon");
+        String selection = io.getInput().toLowerCase();
+        switch (selection) {
+            case "o":
+                findByTitle();
+                break;
+            case "t":
+                findByTag();
+                break;
+            case "p":
+                break;
+            default:
+                io.print("Virhe: komento oli puutteellinen!");
+        }
+    }
+
     public void findByTitle() {
-        io.print("Etsi lukuvinkkeja otsikon perusteella");
-        io.print("Anna hakuparametri");
+        io.print("Etsi lukuvinkkeja otsikon perusteella.");
+        String title = askSearchParameter();
+        if(title == null) {
+            return;
+        }
+        listByTitle(title);
+    }
+
+    public void findByTag() {
+        io.print("Etsi lukuvinkkeja tagien perusteella.");
+        String tag = askSearchParameter();
+        if(tag == null) {
+            return;
+        }
+        listByTag(tag);
+    }
+
+    private String askSearchParameter() {
+        io.print("Anna hakuparametri:");
         String title = io.getInput();
         if (title.isEmpty()) {
             io.print("Haku ei onnistunut!");
             io.print("Hakuparametri ei voi olla tyhja");
-            return;
+            return null;
         }
-        listByTitle(title);
+        return title;
     }
 
     public void createFromIsbn() {
@@ -253,7 +295,7 @@ public class App {
                     removeBook();
                     break;
                 case "e":
-                    findByTitle();
+                    searchBooks();
                     break;
                 case "i":
                     createFromIsbn();
