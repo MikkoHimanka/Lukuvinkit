@@ -229,13 +229,13 @@ public class App {
 
     private String askSearchParameter() {
         io.print("Anna hakuparametri:");
-        String title = io.getInput();
-        if (title.isEmpty()) {
+        String input = io.getInput();
+        if (input.isEmpty()) {
             io.print("Haku ei onnistunut!");
             io.print("Hakuparametri ei voi olla tyhja");
             return null;
         }
-        return title;
+        return input;
     }
 
     public void createFromIsbn() {
