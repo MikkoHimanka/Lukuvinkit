@@ -421,10 +421,11 @@ public class AppTest {
     public void testRemoveBook() {
         sqliteDb.create(new Book("x"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("k");
         app.removeBook();
         List<String> out = io.getPrints();
-        assertEquals(out.size(), 1);
-        assertEquals(out.get(0), "Lukuvinkki on poistettu!");
+        assertEquals(out.size(), 5);
+        assertEquals(out.get(4), "Lukuvinkki on poistettu!");
     }
 
     @Test
@@ -440,7 +441,7 @@ public class AppTest {
     public void testEditBook() {
         sqliteDb.create(new Book("x", "y"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
-        io.addInput("o");
+         io.addInput("o");
         io.addInput("z");
         app.editBook();
         List<String> out = io.getPrints();

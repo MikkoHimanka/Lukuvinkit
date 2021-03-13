@@ -9,6 +9,7 @@ Scenario: lukuvinkin voi poistaa antamalla osan urlista
         | T |
         | L |
         | aap |
+        | K |
         | N |
     Then sovellus tulostaa "Loytyi 1 lukuvinkkia:"
 
@@ -21,6 +22,7 @@ Scenario: lukuvinkin voi poistaa antamalla osan otsikosta
         | T |
         | O |
         | hesa |
+        | K |
         | N |
     Then sovellus tulostaa "Loytyi 1 lukuvinkkia:"
 
@@ -36,5 +38,6 @@ Scenario: jos annettu hakusana löytää useamman vinkin, pyydetään käyttäj�
         | T |
         | O |
         | helsingin sanomat |
+        | K |
         | n |
     Then sovellus tulostaa "Loytyi 1 lukuvinkkia:"
