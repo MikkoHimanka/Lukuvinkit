@@ -441,7 +441,7 @@ public class AppTest {
     public void testEditBook() {
         sqliteDb.create(new Book("x", "y"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
-        io.addInput("o");
+         io.addInput("o");
         io.addInput("z");
         app.editBook();
         List<String> out = io.getPrints();

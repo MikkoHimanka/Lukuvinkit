@@ -20,7 +20,7 @@ public class RemoveBookTest {
 
     @Before
     public void initDb() {
-        sqliteDb = new SqliteBookDao("delete.db");
+        sqliteDb = new SqliteBookDao("test.db");
         sqliteDb.create(new Book("www.is.fi", "Iltasanomat", 1, "Uutisten lukemiseen"));
         sqliteDb.create(new Book("www.google.com", "Google", 2, "Hakukone"));
     }
@@ -32,11 +32,11 @@ public class RemoveBookTest {
 
     @After
     public void deleteFile() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:delete.db");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
         s.execute("DROP TABLE Books;");
         conn.close();
-        File db = new File("delete.db");
+        File db = new File("test.db");
         db.delete();
     }
 
