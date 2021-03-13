@@ -467,6 +467,41 @@ public class AppTest {
         assertEquals(out.get(11), "Lukuvinkkeja ei loytynyt.");
     }
 
+    @Test
+    public void testEmptySearchGivesGoodRecommendations() {
+        sqliteDb.create(new Book("www.google.com", "Google"));
+        sqliteDb.create(new Book("www.bing.com", "Bing"));
+        sqliteDb.create(new Book("www.is.fi", "Ilta Sanomat"));
+        sqliteDb.create(new Book("www.iltalehti.com", "Iltalehti"));
+        sqliteDb.create(new Book("www.oracle.com", "Oracle"));
+        sqliteDb.create(new Book("search.yahoo.com", "Yahoo"));
+
+        io.addInput("o");
+        io.addInput("ilta");
+        io.addInput("t");
+        io.addInput("o");
+        io.addInput("google");
+        io.addInput("p");
+
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.editBook();
+
+        int googlePrint = 0;
+        int oraclePrint = 0;
+        for (int i = 0; i < io.getPrints().size(); i++) {
+            if (io.getPrints().get(i).equals("Linkki: www.google.com")) {
+                googlePrint = i;
+            }
+            if (io.getPrints().get(i).equals("Linkki: www.oracle.com")) {
+                oraclePrint = i;
+            }
+        }
+
+        assertTrue(io.getPrints().contains("Linkki: www.google.com"));
+        assertTrue(googlePrint < oraclePrint);
+
+    }
+
     @After
     public void deleteFile() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
