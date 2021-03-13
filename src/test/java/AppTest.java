@@ -49,6 +49,7 @@ public class AppTest {
         List<URL> validUrls = new ArrayList<URL>();
         try {
             validUrls.add(new URL("http://www.google.com"));
+            validUrls.add(new URL("https://is.fi/viihde"));
         } catch(MalformedURLException ex) {
             throw new RuntimeException(ex);
         }
@@ -67,8 +68,8 @@ public class AppTest {
     
     @Test
     public void testListAllSimple() {
-        sqliteDb.create(new Book("link", "title"));
-        sqliteDb.create(new Book("www.google.com", "haku"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:01"));
+        sqliteDb.create(new Book("www.google.com", "haku", "01-01-2021 kello 00:02"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAll();
         List<String> out = io.getPrints();
@@ -77,18 +78,20 @@ public class AppTest {
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: link");
         assertEquals(out.get(3), "Otsikko: title");
-        assertEquals(out.get(4), "****");
-        assertEquals(out.get(5), "Linkki: www.google.com");
-        assertEquals(out.get(6), "Otsikko: haku");
-        assertEquals(out.get(7), "****");
-    assertEquals(out.size(), 8);
+        assertEquals(out.get(4), "Luotu: 01-01-2021 kello 00:01");
+        assertEquals(out.get(5), "****");
+        assertEquals(out.get(6), "Linkki: www.google.com");
+        assertEquals(out.get(7), "Otsikko: haku");
+        assertEquals(out.get(8), "Luotu: 01-01-2021 kello 00:02");
+        assertEquals(out.get(9), "****");
+    assertEquals(out.size(), 10);
     }
     
     @Test
     public void testListAllUnread() {
-        sqliteDb.create(new Book("link", "title", 1));
-        sqliteDb.create(new Book("www.google.com", "haku", 2));
-        sqliteDb.setRead(new Book("link", "title", 1));
+        sqliteDb.create(new Book("link", "title", 1, "01-01-2000 kello 00:00"));
+        sqliteDb.create(new Book("www.google.com", "haku", 2, "01-01-2000 kello 00:00"));
+        sqliteDb.setRead(new Book("link", "title", 1, "01-01-2000 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAllUnread();
         List<String> out = io.getPrints();
@@ -96,8 +99,9 @@ public class AppTest {
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: www.google.com");
         assertEquals(out.get(3), "Otsikko: haku");
-        assertEquals(out.get(4), "****");
-    assertEquals(out.size(), 5);
+        assertEquals(out.get(4), "Luotu: 01-01-2000 kello 00:00");
+        assertEquals(out.get(5), "****");
+    assertEquals(out.size(), 6);
     }
     
     @Test
@@ -156,6 +160,28 @@ public class AppTest {
     }
 
     @Test
+    public void testSwichContextSearchBooks() {
+        io.addInput("e");
+        io.addInput("p");
+        io.addInput("s");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Valitse hakutyyppi:"));
+    }
+
+    @Test
+    public void testSwichContextFromIsbn() {
+        io.addInput("i");
+        io.addInput("asdfasdf");
+        io.addInput("s");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.switchContext();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Anna kirjan isbn-tunnus:"));
+    }
+
+    @Test
     public void testSwichContextFailedCommand() {
         io.addInput("lol");
         io.addInput("s");
@@ -166,8 +192,59 @@ public class AppTest {
     }
 
     @Test
+    public void testSearchBooksMenuFailedCommand() {
+        io.addInput("lol");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Virhe: komento oli puutteellinen!"));
+    }
+
+    @Test
+    public void testSearchBooksMenuSelectByTitle() {
+        io.addInput("o");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Etsi lukuvinkkeja otsikon perusteella."));
+    }
+
+    @Test
+    public void testSearchBooksMenuSelectByTag() {
+        io.addInput("t");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Etsi lukuvinkkeja tagien perusteella."));
+    }
+
+    @Test
+    public void testSearchBooksMenuReturnToMainMenu() {
+        io.addInput("p");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertEquals(4, out.size());
+    }
+
+    @Test
+    public void testEditBookOverFive() {
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        sqliteDb.create(new Book("link", "a"));
+        sqliteDb.create(new Book("link", "b"));
+        sqliteDb.create(new Book("link", "c"));
+        sqliteDb.create(new Book("link", "d"));
+        sqliteDb.create(new Book("link", "e"));
+        sqliteDb.create(new Book("link", "f"));
+        io.addInput("p");
+        app.editBook();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Loytyi 6 lukuvinkkia"));
+    }
+
+    @Test
     public void testFindByTitleFindsBooksWithKeyword() {
-        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("itl");
         app.findByTitle();
@@ -191,7 +268,7 @@ public class AppTest {
 
     @Test
     public void testFindByTitleDoesntFindBooksWithBadKeyword() {
-        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("lepakko");
         app.findByTitle();
@@ -200,6 +277,60 @@ public class AppTest {
         List<String> out = io.getPrints();
 
         assertEquals(out.get(2), "Lukuvinkkeja ei loytynyt.");
+    }
+
+    @Test
+    public void testFindByTagFindsCorrectBooks() {
+        List<String> tags = new ArrayList<String>();
+        tags.add("tietosanakirja");
+        Book book = sqliteDb.create(new Book("en.wikipedia.org", "wikipedia"));
+        sqliteDb.addTags(book, tags);
+        tags.add("suosikki");
+        book = sqliteDb.create(new Book("britannica.com", "britannica"));
+        sqliteDb.addTags(book, tags);
+        tags.clear();
+        tags.add("hakukone");
+        tags.add("suosikki");
+        book = sqliteDb.create(new Book("google.com", "google"));
+        sqliteDb.addTags(book, tags);
+
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+
+        io.addInput("tietosanakirja");
+        app.findByTag();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Otsikko: wikipedia"));
+        assertTrue(out.contains("Otsikko: britannica"));
+        assertFalse(out.contains("Otsikko: google"));
+
+        io.clearPrints();
+        io.addInput("hakukone");
+        app.findByTag();
+        out = io.getPrints();
+        assertFalse(out.contains("Otsikko: wikipedia"));
+        assertFalse(out.contains("Otsikko: britannica"));
+        assertTrue(out.contains("Otsikko: google"));
+
+        io.clearPrints();
+        io.addInput("asdf");
+        app.findByTag();
+        out = io.getPrints();
+        assertFalse(out.contains("Otsikko: wikipedia"));
+        assertFalse(out.contains("Otsikko: britannica"));
+        assertFalse(out.contains("Otsikko: google"));
+    }
+
+    @Test
+    public void testCreateBookWithDescription() {
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        io.addInput("https://is.fi/viihde");
+        io.addInput("iltasanomat viihde");
+        io.addInput("hyva viihdesivu");
+        io.addInput("tag");
+        app.createBook();
+        List<String> out = io.getPrints();
+
+        assertEquals(1, sqliteDb.findByTitle("iltasanomat viihde").size());
     }
 
     @Test

@@ -54,6 +54,15 @@ public class EditBookTest {
     }
 
     @Test
+    public void testChoosePropertyWithCorrectLink() {
+        Book book = new Book("link", "title", 1, "desc");
+        EditBook e = new EditBook(io, sqliteDb, verifier);
+        io.addInput("l");
+        io.addInput("http://www.google.com");
+        book = e.chooseProperty(book);
+        assertEquals("http://www.google.com", book.getLink());
+    }
+    @Test
     public void testChoosePropertyWithWrongLink() {
         Book book = new Book("link", "title", 1, "desc");
         EditBook e = new EditBook(io, sqliteDb, verifier);
@@ -89,6 +98,19 @@ public class EditBookTest {
         io.addInput("v");
         boolean res = e.run(book);
         assertEquals(res, false);
+    }
+    @Test
+    public void testChoosePropertyAfterFalseSelection() {
+        Book book = new Book("link", "title", 1, "desc");
+        EditBook e = new EditBook(io, sqliteDb, verifier);
+        io.addInput("lol");
+        io.addInput("l");
+        io.addInput("http://www.google.com");
+        book = e.chooseProperty(book);
+
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Virhe: komento oli puutteellinen!\n"));
+        assertEquals("http://www.google.com", book.getLink());
     }
 
     @After

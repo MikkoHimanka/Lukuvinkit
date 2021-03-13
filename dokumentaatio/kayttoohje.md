@@ -62,7 +62,11 @@ Painamalla Li käyttäjä voi listata kaikki sovellukseen tallennetut merkitsem�
 ````
 E
 ````
-Painamalla E käyttäjä voi hakea sovelluksesta otsikon perusteella lukuvinkkejä. Sovellus pyytää käyttäjää kirjoittamaan hakusanan, jonka avulla lukuvinkkejä haetaan.
+Painamalla E käyttäjä voi hakea sovelluksesta lukuvinkkejä. Lukuvinkkejä
+voi etsiä joko otsikon tai tagien perusteella. Hakukriteeri valitaan
+painamalla `O` (otsikko) tai `T` (tagi). Käyttäjä voi myös palata päävalikkoon
+painamalla `P`. Jos käyttäjä ei palannut päävalikkoon, voi haun suorittaa
+syöttämällä ohjelmalle hakuparametrin arvon.
 
 ## Lukuvinkin poistaminen
 ````

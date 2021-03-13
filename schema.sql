@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS Books (
     link TEXT,
     title TEXT,
     markedRead INTEGER,
-    description TEXT
+    description TEXT,
+    time TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Tags (

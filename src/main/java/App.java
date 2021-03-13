@@ -10,6 +10,8 @@ import io.IO;
 import domain.URLVerifier;
 import domain.URLVerificationResult;
 import isbn.BookApi;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class App {
 
@@ -45,6 +47,11 @@ public class App {
         BookList.printBooks(matching, io);
     }
 
+    public void listByTag(String tag) {
+        List<Book> result = dao.findByTag(tag);
+        BookList.printBooks(result, io);
+    }
+
     public void createBook() {
         io.print("Lisaa linkki: (pakollinen)");
         String link = io.getInput();
@@ -68,11 +75,15 @@ public class App {
         String[] tags = tagString.split(",");
 
         Book result;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy 'kello' HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        String time = now.format(formatter);
+        
 
         if (description.equals("")) {
-            result = dao.create(new Book(link, title));
+            result = dao.create(new Book(link, title, time));
         } else {
-            result = dao.create(new Book(link, title, description));
+            result = dao.create(new Book(link, title, description, time));
         }
 
         if (result != null) {
@@ -184,16 +195,53 @@ public class App {
         findCorrectBook(bookList, command);
     }
 
+    public void searchBooks() {
+        io.print("Valitse hakutyyppi:");
+        io.print("(O)tsikon perusteella.");
+        io.print("(T)agien perusteella.");
+        io.print("Takaisin (P)aavalikkoon");
+        String selection = io.getInput().toLowerCase();
+        switch (selection) {
+            case "o":
+                findByTitle();
+                break;
+            case "t":
+                findByTag();
+                break;
+            case "p":
+                break;
+            default:
+                io.print("Virhe: komento oli puutteellinen!");
+        }
+    }
+
     public void findByTitle() {
-        io.print("Etsi lukuvinkkeja otsikon perusteella");
-        io.print("Anna hakuparametri");
-        String title = io.getInput();
-        if (title.isEmpty()) {
-            io.print("Haku ei onnistunut!");
-            io.print("Hakuparametri ei voi olla tyhja");
+        io.print("Etsi lukuvinkkeja otsikon perusteella.");
+        String title = askSearchParameter();
+        if(title == null) {
             return;
         }
         listByTitle(title);
+    }
+
+    public void findByTag() {
+        io.print("Etsi lukuvinkkeja tagien perusteella.");
+        String tag = askSearchParameter();
+        if(tag == null) {
+            return;
+        }
+        listByTag(tag);
+    }
+
+    private String askSearchParameter() {
+        io.print("Anna hakuparametri:");
+        String input = io.getInput();
+        if (input.isEmpty()) {
+            io.print("Haku ei onnistunut!");
+            io.print("Hakuparametri ei voi olla tyhja");
+            return null;
+        }
+        return input;
     }
 
     public void createFromIsbn() {
@@ -253,7 +301,7 @@ public class App {
                     removeBook();
                     break;
                 case "e":
-                    findByTitle();
+                    searchBooks();
                     break;
                 case "i":
                     createFromIsbn();

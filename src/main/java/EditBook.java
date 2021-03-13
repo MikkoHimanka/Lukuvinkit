@@ -38,6 +38,7 @@ public class EditBook extends Command {
     public Book chooseProperty(Book book) {
         String link = book.getLink();
         String title = book.getTitle();
+        String time = book.getTime();
         loop:
         while (true) {
             io.print("Valitse muokattava ominaisuus:");

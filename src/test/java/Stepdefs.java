@@ -65,6 +65,30 @@ public class Stepdefs {
         initializeBooks();
     }
 
+    @When("tietokantaan tallennetaan linkki {string} otsikolla {string}")
+    public void addBooks(String link, String title) {
+        sqliteDb.create(new Book(link, title));
+    }
+
+    @When("suoritetaan komennot:")
+    public void the_following_animals(List<String> commands) {
+        for(String command: commands) {
+            ioStub.addInput(command);
+        }
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
+        app.switchContext();
+    }
+    @When("haetaan lukuvinkeista komennoilla {string}, {string} ja syotetaan hakuehto {string}")
+    public void searchBook(String command1, String command2, String searchParameter) {
+        ioStub.addInput(command1);
+        ioStub.addInput(command2);
+        ioStub.addInput(searchParameter);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
+        app.switchContext();
+    }
+
     @When("valitaan komento {string} ja syotetaan linkki {string} seka otsikko {string}, eika syoteta tageja tietoja pyydettaessa")
     public void linkAndTitleAreEntered(String command, String link, String title) {
         ioStub.addInput(command);
@@ -99,6 +123,17 @@ public class Stepdefs {
         ioStub.addInput(cmd1);
         ioStub.addInput(cmd2);
         ioStub.addInput(cmd3);
+        ioStub.addInput("s");
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
+        app.switchContext();
+    }
+
+    @When("merkataan toinen lukuvinkki luetuksi valitsemalla komennot {string}, {string}, {string} ja {string}")
+    public void booksIsMarkedAsReadWithNarrowing(String cmd1, String cmd2, String cmd3, String cmd4) {
+        ioStub.addInput(cmd1);
+        ioStub.addInput(cmd2);
+        ioStub.addInput(cmd3);
+        ioStub.addInput(cmd4);
         ioStub.addInput("s");
         app = new App(sqliteDb, ioStub, search, verifier, bookApi);
         app.switchContext();
@@ -146,8 +181,8 @@ public class Stepdefs {
 
 
     private void initializeBooks() {
-        sqliteDb.create(new Book("www.google.com", "", 1));
-        sqliteDb.create(new Book("www.bing.com", "", 2));
+        sqliteDb.create(new Book("www.google.com", "", 1, "01-01-2000 kello 00:00"));
+        sqliteDb.create(new Book("www.bing.com", "", 2, "01-01-2000 kello 00:00"));
     }
 
     private void deleteFile() throws SQLException {
