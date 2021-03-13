@@ -27,10 +27,11 @@ public class SqliteBookDao implements BookDao {
     public Book create(Book book) {
         try {
             Statement s = this.db.createStatement();
-            PreparedStatement p = this.db.prepareStatement("INSERT INTO Books (link, title, description, markedRead) VALUES (?, ?, ?, 0)");
+            PreparedStatement p = this.db.prepareStatement("INSERT INTO Books (link, title, description, markedRead, time) VALUES (?, ?, ?, 0, ?)");
             p.setString(1, book.getLink());
             p.setString(2, book.getTitle());
             p.setString(3, book.getDescription());
+            p.setString(4, book.getTime());
             p.execute();
 
             // Retrieve book id
@@ -61,12 +62,12 @@ public class SqliteBookDao implements BookDao {
     public List<Book> getAll() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT id, link, title, description FROM Books");
+            ResultSet r = s.executeQuery("SELECT id, link, title, description, time FROM Books");
 
             List<Book> books = new ArrayList<>();
 
             while (r.next()) {
-                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id"), r.getString("description")));
+                books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id"), r.getString("description"), r.getString("time")));
             }
 
             return books;
@@ -79,7 +80,7 @@ public class SqliteBookDao implements BookDao {
     public List<Book> getUnread() {
         try {
             Statement s = this.db.createStatement();
-            ResultSet r = s.executeQuery("SELECT id, link, title, description FROM Books WHERE markedRead=0");
+            ResultSet r = s.executeQuery("SELECT id, link, title, description, time FROM Books WHERE markedRead=0");
 
             return formList(r);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class SqliteBookDao implements BookDao {
     @Override
     public List<Book> findByTitle(String title) {
         try {
-            PreparedStatement p = this.db.prepareStatement("SELECT id, link, title FROM Books WHERE title LIKE ?");
+            PreparedStatement p = this.db.prepareStatement("SELECT id, link, title, time FROM Books WHERE title LIKE ?");
             p.setString(1, "%" + title + "%");
             ResultSet r = p.executeQuery();
 
@@ -151,7 +152,7 @@ public class SqliteBookDao implements BookDao {
     public List<Book> findByTag(String tag) {
         try {
             PreparedStatement p = this.db.prepareStatement(
-                    "SELECT B.id, B.link, B.title " +
+                    "SELECT B.id, B.link, B.title, B.time " +
                     "FROM Books B, Tags T " +
                     "WHERE B.id = T.book_id AND T.tag=?");
             p.setString(1, tag);
@@ -194,7 +195,7 @@ public class SqliteBookDao implements BookDao {
         List<Book> books = new ArrayList<>();
 
         while (r.next()) {
-            books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id")));
+            books.add(new Book(r.getString("link"), r.getString("title"), r.getInt("id"), r.getString("time")));
         }
 
         return books;

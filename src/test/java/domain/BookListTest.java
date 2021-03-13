@@ -18,13 +18,13 @@ public class BookListTest {
     public void setUp(){
         io = new StubIO();
         this.books = new ArrayList<>();
-        this.books.add(new Book("www.url.com", "Kuusipuu", 0));
-        this.books.add(new Book("www.orkki.com", "orkki", 1));
-        this.books.add(new Book("www.kukkakauppa.com", "Kukkakauppa", 2));
-        this.books.add(new Book("www.abcdefg.com", "abcdefg", 3));
-        this.books.add(new Book("www.qwerty.se", "QwErTy", 4));
-        this.books.add(new Book("linkki", "Otsikko", 5));
-        this.books.add(new Book("123", "321", "kuvaus"));
+        this.books.add(new Book("www.url.com", "Kuusipuu", 0, "01-01-2000 kello 00:00"));
+        this.books.add(new Book("www.orkki.com", "orkki", 1, "24-12-2024 kello 09:00"));
+        this.books.add(new Book("www.kukkakauppa.com", "Kukkakauppa", 2, "13-03-2021 kello 12:34"));
+        this.books.add(new Book("www.abcdefg.com", "abcdefg", 3, "06-06-2006 kello 06:06"));
+        this.books.add(new Book("www.qwerty.se", "QwErTy", 4, "01-01-2021 kello 01:01"));
+        this.books.add(new Book("linkki", "Otsikko", 5, "13-03-2021 kello 12:36"));
+        this.books.add(new Book("123", "321", "kuvaus", "12-03-2321 kello 12:31"));
 
     }
 

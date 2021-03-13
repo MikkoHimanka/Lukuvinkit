@@ -9,6 +9,8 @@ import org.json.simple.parser.ParseException;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class GoogleBookApi implements BookApi {
@@ -36,9 +38,12 @@ public class GoogleBookApi implements BookApi {
 
         String title = getTitle(data);
         String link = getLink(data);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy 'kello' HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        String time = now.format(formatter);
         if (link == null) return null;
 
-        return new Book(link, title);
+        return new Book(link, title, time);
     }
 
     private String getTitle(JSONObject blob) {

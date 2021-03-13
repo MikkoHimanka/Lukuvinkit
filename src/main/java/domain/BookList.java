@@ -77,6 +77,7 @@ public abstract class BookList {
         if (book.getDescription() != null) {
             io.print("Kuvaus: " + book.getDescription());
         }
+        io.print("Luotu: " + book.getTime());
     }
 
     public static Book choose(List<Book> books, IO io) {

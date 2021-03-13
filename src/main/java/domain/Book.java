@@ -1,10 +1,12 @@
 package domain;
 
 public class Book {
+
     private String link;
     private String title;
     private int id;
     private String description;
+    private String time;
 
     public Book(String link) {
         this.link = link;
@@ -16,17 +18,29 @@ public class Book {
     }
 
     public Book(String link, String title, int id) {
-        this(link, title);
+        this.link = link;
+        this.title = title;
         this.id = id;
     }
 
-    public Book(String link, String title, String description) {
-        this(link, title);
+    public Book(String link, String title, String time) {
+        this.link = link;
+        this.title = title;
+        this.time = time;
+    }
+
+    public Book(String link, String title, int id, String time) {
+        this(link, title, time);
+        this.id = id;
+    }
+
+    public Book(String link, String title, String description, String time) {
+        this(link, title, time);
         this.description = description;
     }
 
-    public Book(String link, String title, int id, String description) {
-        this(link, title);
+    public Book(String link, String title, int id, String description, String time) {
+        this(link, title, time);
         this.id = id;
         this.description = description;
     }
@@ -62,4 +76,13 @@ public class Book {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
 }
