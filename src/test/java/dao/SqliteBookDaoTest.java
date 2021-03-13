@@ -141,8 +141,16 @@ public class SqliteBookDaoTest {
     }
 
     @Test
+    public void testTimeOnCreate() {
+        Book book = new Book("link", "title", "01-01-2000 kello 00:00");
+        sqliteDb.create(book);
+        List<Book> books = sqliteDb.getAll();
+        assertEquals(books.get(0).getTime(), "01-01-2000 kello 00:00");
+    }
+    
+    @Test
     public void testDescriptionsOnCreate() {
-        Book book = new Book("link", "title", "desc");
+        Book book = new Book("link", "title", "desc", "01-01-2000 kello 00:00");
         sqliteDb.create(book);
         List<Book> books = sqliteDb.getAll();
         assertEquals(books.get(0).getDescription(), "desc");
@@ -150,7 +158,7 @@ public class SqliteBookDaoTest {
 
     @Test
     public void testDescriptionsOnModify() {
-        Book book = new Book("link", "title", "desc1");
+        Book book = new Book("link", "title", "desc1", "01-01-2000 kello 00:00");
         book = sqliteDb.create(book);
         book.setDescription("desc2");
         sqliteDb.updateBook(book);

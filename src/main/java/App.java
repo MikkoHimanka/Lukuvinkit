@@ -10,6 +10,8 @@ import io.IO;
 import domain.URLVerifier;
 import domain.URLVerificationResult;
 import isbn.BookApi;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class App {
 
@@ -68,11 +70,15 @@ public class App {
         String[] tags = tagString.split(",");
 
         Book result;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy 'kello' HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        String time = now.format(formatter);
+        
 
         if (description.equals("")) {
-            result = dao.create(new Book(link, title));
+            result = dao.create(new Book(link, title, time));
         } else {
-            result = dao.create(new Book(link, title, description));
+            result = dao.create(new Book(link, title, description, time));
         }
 
         if (result != null) {

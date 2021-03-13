@@ -67,8 +67,8 @@ public class AppTest {
     
     @Test
     public void testListAllSimple() {
-        sqliteDb.create(new Book("link", "title"));
-        sqliteDb.create(new Book("www.google.com", "haku"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:01"));
+        sqliteDb.create(new Book("www.google.com", "haku", "01-01-2021 kello 00:02"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAll();
         List<String> out = io.getPrints();
@@ -77,18 +77,20 @@ public class AppTest {
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: link");
         assertEquals(out.get(3), "Otsikko: title");
-        assertEquals(out.get(4), "****");
-        assertEquals(out.get(5), "Linkki: www.google.com");
-        assertEquals(out.get(6), "Otsikko: haku");
-        assertEquals(out.get(7), "****");
-    assertEquals(out.size(), 8);
+        assertEquals(out.get(4), "Luotu: 01-01-2021 kello 00:01");
+        assertEquals(out.get(5), "****");
+        assertEquals(out.get(6), "Linkki: www.google.com");
+        assertEquals(out.get(7), "Otsikko: haku");
+        assertEquals(out.get(8), "Luotu: 01-01-2021 kello 00:02");
+        assertEquals(out.get(9), "****");
+    assertEquals(out.size(), 10);
     }
     
     @Test
     public void testListAllUnread() {
-        sqliteDb.create(new Book("link", "title", 1));
-        sqliteDb.create(new Book("www.google.com", "haku", 2));
-        sqliteDb.setRead(new Book("link", "title", 1));
+        sqliteDb.create(new Book("link", "title", 1, "01-01-2000 kello 00:00"));
+        sqliteDb.create(new Book("www.google.com", "haku", 2, "01-01-2000 kello 00:00"));
+        sqliteDb.setRead(new Book("link", "title", 1, "01-01-2000 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         app.listAllUnread();
         List<String> out = io.getPrints();
@@ -96,8 +98,9 @@ public class AppTest {
         assertEquals(out.get(1), "****");
         assertEquals(out.get(2), "Linkki: www.google.com");
         assertEquals(out.get(3), "Otsikko: haku");
-        assertEquals(out.get(4), "****");
-    assertEquals(out.size(), 5);
+        assertEquals(out.get(4), "Luotu: 01-01-2000 kello 00:00");
+        assertEquals(out.get(5), "****");
+    assertEquals(out.size(), 6);
     }
     
     @Test
@@ -167,7 +170,7 @@ public class AppTest {
 
     @Test
     public void testFindByTitleFindsBooksWithKeyword() {
-        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("itl");
         app.findByTitle();
@@ -191,7 +194,7 @@ public class AppTest {
 
     @Test
     public void testFindByTitleDoesntFindBooksWithBadKeyword() {
-        sqliteDb.create(new Book("link", "title"));
+        sqliteDb.create(new Book("link", "title", "01-01-2021 kello 00:00"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
         io.addInput("lepakko");
         app.findByTitle();

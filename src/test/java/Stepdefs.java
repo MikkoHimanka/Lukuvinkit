@@ -146,8 +146,8 @@ public class Stepdefs {
 
 
     private void initializeBooks() {
-        sqliteDb.create(new Book("www.google.com", "", 1));
-        sqliteDb.create(new Book("www.bing.com", "", 2));
+        sqliteDb.create(new Book("www.google.com", "", 1, "01-01-2000 kello 00:00"));
+        sqliteDb.create(new Book("www.bing.com", "", 2, "01-01-2000 kello 00:00"));
     }
 
     private void deleteFile() throws SQLException {
