@@ -166,6 +166,42 @@ public class AppTest {
     }
 
     @Test
+    public void testSearchBooksMenuFailedCommand() {
+        io.addInput("lol");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Virhe: komento oli puutteellinen!"));
+    }
+
+    @Test
+    public void testSearchBooksMenuSelectByTitle() {
+        io.addInput("o");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Etsi lukuvinkkeja otsikon perusteella."));
+    }
+
+    @Test
+    public void testSearchBooksMenuSelectByTag() {
+        io.addInput("t");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Etsi lukuvinkkeja tagien perusteella."));
+    }
+
+    @Test
+    public void testSearchBooksMenuReturnToMainMenu() {
+        io.addInput("p");
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+        app.searchBooks();
+        List<String> out = io.getPrints();
+        assertEquals(4, out.size());
+    }
+
+    @Test
     public void testFindByTitleFindsBooksWithKeyword() {
         sqliteDb.create(new Book("link", "title"));
         App app = new App(sqliteDb, io, search, verifier, bookApi);
@@ -200,6 +236,44 @@ public class AppTest {
         List<String> out = io.getPrints();
 
         assertEquals(out.get(2), "Lukuvinkkeja ei loytynyt.");
+    }
+
+    @Test
+    public void testFindByTagFindsCorrectBooks() {
+        List<String> tags = new ArrayList<String>();
+        tags.add("tietosanakirja");
+        Book book = sqliteDb.create(new Book("en.wikipedia.org", "wikipedia"));
+        sqliteDb.addTags(book, tags);
+        tags.add("suosikki");
+        book = sqliteDb.create(new Book("britannica.com", "britannica"));
+        sqliteDb.addTags(book, tags);
+        tags.clear();
+        tags.add("hakukone");
+        tags.add("suosikki");
+        book = sqliteDb.create(new Book("google.com", "google"));
+        sqliteDb.addTags(book, tags);
+
+        App app = new App(sqliteDb, io, search, verifier, bookApi);
+
+        app.listByTag("tietosanakirja");
+        List<String> out = io.getPrints();
+        assertTrue(out.contains("Otsikko: wikipedia"));
+        assertTrue(out.contains("Otsikko: britannica"));
+        assertFalse(out.contains("Otsikko: google"));
+
+        io.clearPrints();
+        app.listByTag("hakukone");
+        out = io.getPrints();
+        assertFalse(out.contains("Otsikko: wikipedia"));
+        assertFalse(out.contains("Otsikko: britannica"));
+        assertTrue(out.contains("Otsikko: google"));
+
+        io.clearPrints();
+        app.listByTag("asdf");
+        out = io.getPrints();
+        assertFalse(out.contains("Otsikko: wikipedia"));
+        assertFalse(out.contains("Otsikko: britannica"));
+        assertFalse(out.contains("Otsikko: google"));
     }
 
     @Test

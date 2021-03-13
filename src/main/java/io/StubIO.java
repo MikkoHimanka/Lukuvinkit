@@ -28,6 +28,10 @@ public class StubIO implements IO {
         return prints;
     }
 
+    public void clearPrints() {
+        prints.clear();
+    }
+
     @Override
     public String getInput() {
         if (inputs.size() > 0) {
