@@ -10,6 +10,9 @@ import io.IO;
 import domain.URLVerifier;
 import domain.URLVerificationResult;
 import isbn.BookApi;
+import kotlin.Triple;
+import org.javatuples.Triplet;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -107,71 +110,78 @@ public class App {
         return input.equals("k");
     }
 
-    private List<Book> searchValidBooks(List<Book> bookList) {
-        while (bookList.size() > 5) {
-            io.print("Loytyi " + bookList.size() + " lukuvinkkia");
-            bookList = BookList.narrowingSearch(bookList, io);
-            if (bookList == null) {
+    private Triplet<List<Book>, String, String> searchValidBooks(Triplet<List<Book>, String, String> bookListTriplet) {
+        while (bookListTriplet.getValue0().size() > 5) {
+            io.print("Loytyi " + bookListTriplet.getValue0().size() + " lukuvinkkia");
+            bookListTriplet = BookList.narrowingSearch(bookListTriplet, io);
+            if (bookListTriplet.getValue0() == null) {
                 return null;
             }
         }
-        return bookList;
+        return bookListTriplet;
     }
 
-    private void findCorrectBook(List<Book> bookList, Command command) {
-        if (bookList == null || bookList.isEmpty()) {
+    private void findCorrectBook(Triplet<List<Book>, String, String> bookListTriplet, Command command) {
+        if (bookListTriplet.getValue0() == null || bookListTriplet.getValue0().isEmpty()) {
             io.print("Lukuvinkkeja ei loytynyt.");
             return;
         }
         while (true) {
-            bookList = searchValidBooks(bookList);
-            if (switchBookListSize(bookList, command) == null) {
+            bookListTriplet = searchValidBooks(bookListTriplet);
+            bookListTriplet = switchBookListSize(bookListTriplet, command);
+            if (bookListTriplet == null) {
                 return;
             }
             command.actionQuestion();
-            BookList.printBooksWithNumbers(bookList, io);
+            BookList.printBooksWithNumbers(bookListTriplet.getValue0(), io);
             io.print("\n(V)alitse");
             io.print("(T)arkenna hakuehtojasi");
             io.print("Takaisin (P)aavalikkoon");
-            bookList = switchOptions(bookList, command);
-            if (bookList == null) {
+            bookListTriplet = switchOptions(bookListTriplet, command);
+            if (bookListTriplet == null) {
                 return;
             }
         }
     }
 
-    private List<Book> switchBookListSize(List<Book> bookList, Command command) {
-        if (bookList == null) {
+    private Triplet<List<Book>, String, String> switchBookListSize(Triplet<List<Book>, String, String> bookListTriplet, Command command) {
+        if (bookListTriplet == null || bookListTriplet.getValue0() == null) {
             return null;
         }
-        switch (bookList.size()) {
+        switch (bookListTriplet.getValue0().size()) {
             case 0:
                 io.print("Lukuvinkkeja ei loytynyt annetulla haulla.");
-                return null;
+                io.print("Tarkoititko jotain naista?");
+
+                String keyword = bookListTriplet.getValue1().equals("") ?
+                        bookListTriplet.getValue2() :
+                        bookListTriplet.getValue1();
+
+                return new Triplet<>(search.getBooksByRank(keyword, dao.getAll()), "", "");
             case 1:
-                command.run(bookList.get(0));
+                command.run(bookListTriplet.getValue0().get(0));
                 return null;
             default:
-                return bookList;
+                return bookListTriplet;
         }
     }
 
-    private List<Book> switchOptions(List<Book> bookList, Command command) {
+    private Triplet<List<Book>, String, String> switchOptions(Triplet<List<Book>, String, String> bookListTriplet, Command command) {
         String input = io.getInput().toLowerCase();
         switch (input) {
             case ("v"):
-                Book chosen = BookList.choose(bookList, io);
+                Book chosen = BookList.choose(bookListTriplet.getValue0(), io);
                 if (command.run(chosen)) {
                     return null;
                 }
-                return bookList;
+                return bookListTriplet;
             case ("t"):
-                return BookList.narrowingSearch(bookList, io);
+                return BookList.narrowingSearch(bookListTriplet, io);
             case ("p"):
                 return null;
             default:
                 io.print("Virhe: komento oli puutteellinen!");
-                return bookList;
+                return bookListTriplet;
         }
     }
 
@@ -179,20 +189,22 @@ public class App {
         
         Command command = new EditBook(io, dao, urlVerifier);
         List<Book> bookList = dao.getAll();
-        
-        findCorrectBook(bookList, command);
+        Triplet<List<Book>, String, String> bookListTriplet = new Triplet<>(bookList, "", "");
+        findCorrectBook(bookListTriplet, command);
     }
 
     public void removeBook() {
         Command command = new RemoveBook(io, dao);
         List<Book> bookList = dao.getAll();
-        findCorrectBook(bookList, command);
+        Triplet<List<Book>, String, String> bookListTriplet = new Triplet<>(bookList, "", "");
+        findCorrectBook(bookListTriplet, command);
     }
 
     public void markAsRead() {
         Command command = new MarkBook(io, dao);
         List<Book> bookList = dao.getUnread();
-        findCorrectBook(bookList, command);
+        Triplet<List<Book>, String, String> bookListTriplet = new Triplet<>(bookList, "", "");
+        findCorrectBook(bookListTriplet, command);
     }
 
     public void searchBooks() {

@@ -1,6 +1,7 @@
 package domain;
 
 import io.IO;
+import org.javatuples.Triplet;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ public abstract class BookList {
                 .collect(Collectors.toList());
     }
 
-    public static List<Book> narrowingSearch(List<Book> books, IO io) {
+    public static Triplet<List<Book>, String, String> narrowingSearch(Triplet<List<Book>, String, String> books, IO io) {
         String url = "";
         String title = "";
         loop:
@@ -33,13 +34,13 @@ public abstract class BookList {
                     title = io.getInput().toLowerCase();
                     break loop;
                 case ("p"):
-                    return null;
+                    return new Triplet<>(null, title, url);
                 default:
                     io.print("Virhe: komento oli puutteellinen!");
                     break;
             }
         }
-        return filterBooks(books, title, url);
+        return new Triplet<>(filterBooks(books.getValue0(), title, url), title, url);
     }
 
     public static void printBooksWithNumbers(List<Book> books, IO io) {

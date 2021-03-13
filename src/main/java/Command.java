@@ -5,6 +5,7 @@ import io.IO;
 public abstract class Command {
     protected IO io;
     protected BookDao dao;
+    protected String keyword;
     
     public Command(IO io, BookDao dao) {
         this.io = io;

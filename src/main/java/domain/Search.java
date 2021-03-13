@@ -35,6 +35,26 @@ public class Search {
         this.RANK_CUTOFF = cut;
     }
 
+    public List<Book> getBooksByRank(String keyword, List<Book> books) {
+        List<RankedBook> rankedBooks = new ArrayList<>();
+
+        for (Book book : books) {
+            rankedBooks.add(new RankedBook(
+                    this.calculateEditDistance(keyword, book.getTitle()),
+                    book
+            ));
+        }
+
+        Collections.sort(rankedBooks);
+
+        List<Book> newBookList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            newBookList.add(rankedBooks.get(i).getBook());
+        }
+
+        return newBookList;
+    }
+
     public List<Book> findBooksByTitle(String keyword, List<Book> books) {
         List<RankedBook> rankedBooks = new ArrayList<>();
 
