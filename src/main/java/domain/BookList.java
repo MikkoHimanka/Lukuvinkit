@@ -3,6 +3,8 @@ package domain;
 import io.IO;
 import org.javatuples.Triplet;
 
+import dao.BookDao;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,7 @@ public abstract class BookList {
         return new Triplet<>(filterBooks(books.getValue0(), title, url), title, url);
     }
 
-    public static void printBooksWithNumbers(List<Book> books, IO io) {
+    public static void printBooksWithNumbers(List<Book> books, IO io, BookDao dao) {
         if (books.isEmpty()) {
             io.print("Lukuvinkkeja ei loytynyt.");
         } else {
@@ -51,32 +53,45 @@ public abstract class BookList {
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
                 io.print("(" + (i+1) + ")");
-                printBook(books.get(i), io);
+                printBook(books.get(i), io, dao);
                 io.print("****");
             }
         }
     }
 
-    public static void printBooks(List<Book> books, IO io) {
+    public static void printBooks(List<Book> books, IO io, BookDao dao) {
         if (books.isEmpty()) {
             io.print("Lukuvinkkeja ei loytynyt.");
         } else {
             io.print("Loytyi " + books.size() + " lukuvinkkia:");
             io.print("****");
             for (int i = 0; i < books.size(); ++i) {
-                printBook(books.get(i), io);
+                printBook(books.get(i), io, dao);
                 io.print("****");
             }
         }
     }
 
-    private static void printBook(Book book, IO io) {
+    private static void printBook(Book book, IO io, BookDao dao) {
         io.print("Linkki: " + book.getLink());
         if (!(book.getTitle().isEmpty())) {
             io.print("Otsikko: " + book.getTitle());
         }
         if (book.getDescription() != null) {
             io.print("Kuvaus: " + book.getDescription());
+        }
+        List<String> tags = dao.findTagsByBook(book);
+        if (tags != null && tags.size() > 0) {
+            String tag_string = "";
+            for (int i = 0; i < tags.size(); ++i) {
+                if(i > 0) {
+                    tag_string = tag_string + ", " + tags.get(i);
+                }
+                else {
+                    tag_string = tags.get(i);
+                }
+            }
+            io.print("Tagit: " + tag_string);
         }
         io.print("Luotu: " + book.getTime());
     }
