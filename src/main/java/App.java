@@ -34,12 +34,12 @@ public class App {
 
     public void listAll() {
         List<Book> books = dao.getAll();
-        BookList.printBooks(books, io);
+        BookList.printBooks(books, io, dao);
     }
 
     public void listAllUnread() {
         List<Book> books = dao.getUnread();
-        BookList.printBooks(books, io);
+        BookList.printBooks(books, io, dao);
     }
 
     public void listByTitle(String title) {
@@ -47,12 +47,12 @@ public class App {
 
         List<Book> matching = search.findBooksByTitle(title, books);
 
-        BookList.printBooks(matching, io);
+        BookList.printBooks(matching, io, dao);
     }
 
     public void listByTag(String tag) {
         List<Book> result = dao.findByTag(tag);
-        BookList.printBooks(result, io);
+        BookList.printBooks(result, io, dao);
     }
 
     public void createBook() {
@@ -133,7 +133,7 @@ public class App {
                 return;
             }
             command.actionQuestion();
-            BookList.printBooksWithNumbers(bookListTriplet.getValue0(), io);
+            BookList.printBooksWithNumbers(bookListTriplet.getValue0(), io, dao);
             io.print("\n(V)alitse");
             io.print("(T)arkenna hakuehtojasi");
             io.print("Takaisin (P)aavalikkoon");

@@ -1,18 +1,26 @@
 package domain;
+import dao.SqliteBookDao;
 
 import io.StubIO;
 import kotlin.Triple;
 import org.javatuples.Triplet;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import java.io.File;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class BookListTest {
+    private SqliteBookDao sqliteDb;
     private List<Book> books;
     private StubIO io;
     private Triplet<List<Book>, String, String> booksTriplet;
@@ -30,6 +38,11 @@ public class BookListTest {
         this.books.add(new Book("123", "321", "kuvaus", "12-03-2321 kello 12:31"));
         this.booksTriplet = new Triplet<>(this.books, "", "");
 
+    }
+
+    @Before
+    public void initDb() {
+        sqliteDb = new SqliteBookDao("test.db");
     }
 
     @Test
@@ -76,15 +89,98 @@ public class BookListTest {
     @Test
     public void printBooksWithNumbersPrintsMessageOnEmptyList() {
         List<Book> books2 = new ArrayList<Book>();
-        BookList.printBooksWithNumbers(books2, io);
+        BookList.printBooksWithNumbers(books2, io, sqliteDb);
         assertEquals(io.getPrints().contains("Lukuvinkkeja ei loytynyt."), true);
     }
 
     @Test
+    public void printBooksWithNumbersWithoutTags() {
+        List<Book> books2 = new ArrayList<Book>();
+        books2.add(new Book("www.url.com", "Kuusipuu", 0, "01-01-2000 kello 00:00"));
+        BookList.printBooksWithNumbers(books2, io, sqliteDb);
+        List<String> out = io.getPrints();
+        assertEquals("Loytyi 1 lukuvinkkia:", out.get(0));
+        assertEquals("****", out.get(1));
+        assertEquals("(1)", out.get(2));
+        assertEquals("Linkki: www.url.com", out.get(3));
+        assertEquals("Otsikko: Kuusipuu", out.get(4));
+        assertEquals("Luotu: 01-01-2000 kello 00:00", out.get(5));
+        assertEquals("****", out.get(6));
+    }
+
+    @Test
+    public void printBooksWithoutNumbersWithoutTags() {
+        List<Book> books2 = new ArrayList<Book>();
+        books2.add(new Book("www.url.com", "Kuusipuu", 0, "01-01-2000 kello 00:00"));
+        BookList.printBooks(books2, io, sqliteDb);
+        List<String> out = io.getPrints();
+        assertEquals("Loytyi 1 lukuvinkkia:", out.get(0));
+        assertEquals("****", out.get(1));
+        assertEquals("Linkki: www.url.com", out.get(2));
+        assertEquals("Otsikko: Kuusipuu", out.get(3));
+        assertEquals("Luotu: 01-01-2000 kello 00:00", out.get(4));
+        assertEquals("****", out.get(5));
+    }
+
+    @Test
+    public void printBooksWithNumbersWithTags() {
+        List<Book> books2 = new ArrayList<Book>();
+        List<String> tags = new ArrayList<String>();
+        books2.add(new Book("www.url.com", "Kuusipuu", 0, "01-01-2000 kello 00:00"));
+        tags.add("tagi1");
+        tags.add("tagi2");
+        sqliteDb.create(books2.get(0));
+        sqliteDb.addTags(books2.get(0), tags);
+
+        BookList.printBooksWithNumbers(books2, io, sqliteDb);
+        List<String> out = io.getPrints();
+        assertEquals("Loytyi 1 lukuvinkkia:", out.get(0));
+        assertEquals("****", out.get(1));
+        assertEquals("(1)", out.get(2));
+        assertEquals("Linkki: www.url.com", out.get(3));
+        assertEquals("Otsikko: Kuusipuu", out.get(4));
+        assertEquals("Tagit: tagi1, tagi2", out.get(5));
+        assertEquals("Luotu: 01-01-2000 kello 00:00", out.get(6));
+        assertEquals("****", out.get(7));
+    }
+
+    @Test
+    public void printBooksWithoutNumbersWithTags() {
+        List<Book> books2 = new ArrayList<Book>();
+        books2.add(new Book("www.url.com", "Kuusipuu", 0, "01-01-2000 kello 00:00"));
+        List<String> tags = new ArrayList<String>();
+        tags.add("tagi1");
+        tags.add("tagi2");
+
+        sqliteDb.create(books2.get(0));
+        sqliteDb.addTags(books2.get(0), tags);
+        BookList.printBooks(books2, io, sqliteDb);
+        List<String> out = io.getPrints();
+        assertEquals("Loytyi 1 lukuvinkkia:", out.get(0));
+        assertEquals("****", out.get(1));
+        assertEquals("Linkki: www.url.com", out.get(2));
+        assertEquals("Otsikko: Kuusipuu", out.get(3));
+        assertEquals("Tagit: tagi1, tagi2", out.get(4));
+        assertEquals("Luotu: 01-01-2000 kello 00:00", out.get(5));
+        assertEquals("****", out.get(6));
+    }
+
+
+    @Test
     public void printBookPrintsDescriptionOnlyIfFieldPopulated() {
-        BookList.printBooks(Arrays.asList(books.get(0)), io);
+        BookList.printBooks(Arrays.asList(books.get(0)), io, sqliteDb);
         assertEquals(io.getPrints().contains("Kuvaus: "), false);
-        BookList.printBooks(Arrays.asList(books.get(6)), io);
+        BookList.printBooks(Arrays.asList(books.get(6)), io, sqliteDb);
         assertEquals(io.getPrints().contains("Kuvaus: kuvaus"), true);
+    }
+
+    @After
+    public void deleteFile() throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+        Statement s = conn.createStatement();
+        s.execute("DROP TABLE Books;");
+        conn.close();
+        File db = new File("test.db");
+        db.delete();
     }
 }
