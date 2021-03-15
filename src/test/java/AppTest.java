@@ -507,6 +507,7 @@ public class AppTest {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
         Statement s = conn.createStatement();
         s.execute("DROP TABLE Books;");
+        s.execute("DROP TABLE Tags");
         conn.close();
         File db = new File("test.db");
         db.delete();
