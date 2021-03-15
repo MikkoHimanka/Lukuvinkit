@@ -78,11 +78,10 @@ public class App {
         String[] tags = tagString.split(",");
 
         Book result;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy 'kello' HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy 'kello' HH:mm");
         LocalDateTime now = LocalDateTime.now();
         String time = now.format(formatter);
         
-
         if (description.equals("")) {
             result = dao.create(new Book(link, title, time));
         } else {

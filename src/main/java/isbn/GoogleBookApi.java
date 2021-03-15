@@ -38,7 +38,7 @@ public class GoogleBookApi implements BookApi {
 
         String title = getTitle(data);
         String link = getLink(data);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy 'kello' HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy 'kello' HH:mm");
         LocalDateTime now = LocalDateTime.now();
         String time = now.format(formatter);
         if (link == null) return null;
