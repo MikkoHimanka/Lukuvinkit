@@ -63,8 +63,8 @@ public class GoogleBookApi implements BookApi {
             StringBuilder response = new StringBuilder();
             Scanner scanner = new Scanner(url.openStream());
 
-            while (scanner.hasNext()) {
-                response.append(scanner.next());
+            while (scanner.hasNextLine()) {
+                response.append(scanner.nextLine());
             }
 
             scanner.close();
