@@ -48,7 +48,12 @@ public class Search {
         Collections.sort(rankedBooks);
 
         List<Book> newBookList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+
+        int maximumBooks = rankedBooks.size() < 5 ?
+                rankedBooks.size() :
+                5;
+
+        for (int i = 0; i < maximumBooks; i++) {
             newBookList.add(rankedBooks.get(i).getBook());
         }
 
