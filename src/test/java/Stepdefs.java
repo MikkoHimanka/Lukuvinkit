@@ -81,8 +81,7 @@ public class Stepdefs {
             ioStub.addInput(command);
         }
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @When("haetaan lukuvinkeista komennoilla {string}, {string} ja syotetaan hakuehto {string}")
@@ -91,8 +90,7 @@ public class Stepdefs {
         ioStub.addInput(command2);
         ioStub.addInput(searchParameter);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
     
     @When("valitaan komento {string} ja syotetaan linkki {string} seka otsikko {string}, eika syoteta tageja tietoja pyydettaessa")
@@ -103,16 +101,24 @@ public class Stepdefs {
         ioStub.addInput("");
         ioStub.addInput("");
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @When("valitaan komento {string}")
     public void commandIsEntered(String command) {
         ioStub.addInput(command);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
+    }
+
+    @Given("tietokannassa on esimerkkikirjasto")
+    public void exampleLibrary() {
+        sqliteDb.create(new Book("www.google.com", "Google", 0, "hakukone", "31-01-2021 kello 12:31"));
+        sqliteDb.create(new Book("www.bing.com", "Bing", 1, "hakukone", "31-01-2021 kello 12:32"));
+        sqliteDb.create(new Book("www.oracle.com", "Oracle", 2, "Java", "01-02-2021 kello 12:33"));
+        sqliteDb.create(new Book("www.fox.com", "Fox", 3, "TV kanava", "01-02-2021 kello 22:13"));
+        sqliteDb.create(new Book("www.github.com", "Github", 4, "VCS", "01-02-2021 kello 22:13"));
+        sqliteDb.create(new Book("www.is.fi", "Ilta Sanomat", 5, "Iltapaivalehti", "01-02-2021 kello 22:13"));
     }
 
     @When("valitaan komento {string} ja syotetaan linkki {string} linkkia pyydettaessa")
@@ -120,8 +126,7 @@ public class Stepdefs {
         ioStub.addInput(command);
         ioStub.addInput(link);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @When("merkataan toinen lukuvinkki luetuksi valitsemalla komennot {string}, {string} ja {string}")
@@ -130,8 +135,7 @@ public class Stepdefs {
         ioStub.addInput(cmd2);
         ioStub.addInput(cmd3);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @When("merkataan toinen lukuvinkki luetuksi valitsemalla komennot {string}, {string}, {string} ja {string}")
@@ -141,8 +145,7 @@ public class Stepdefs {
         ioStub.addInput(cmd3);
         ioStub.addInput(cmd4);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @When("merkataan lukuvinkit luetuiksi valitsemalla komennot {string}, {string} ja {string} seka {string}")
@@ -152,8 +155,7 @@ public class Stepdefs {
         ioStub.addInput(cmd3);
         ioStub.addInput(cmd4);
         ioStub.addInput("s");
-        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
-        app.switchContext();
+        startApp();
     }
 
     @Then("sovellus hyvaksyy syotteet ja tulostaa {string}")
@@ -185,6 +187,24 @@ public class Stepdefs {
         assertTrue(out.contains("Linkki: www.is.fi"));
     }
 
+    @Then("{string} on ylempana kuin {string}")
+    public void isBefore(String stringA, String stringB) throws SQLException {
+        List<String> out = ioStub.getPrints();
+        int stringIndexA = 0;
+        int stringIndexB = 0;
+
+        for (int i = 0; i < out.size(); ++i) {
+            if (out.get(i).equals(stringA)) {
+                stringIndexA = i;
+            }
+            if (out.get(i).equals(stringB)) {
+                stringIndexB = i;
+            }
+        }
+
+        assertTrue(stringIndexA < stringIndexB);
+    }
+  
     @Then("sovellus nayttaa lukuvinkille oikean lisaysajan")
     public void timestampIsCorrect() throws SQLException {
         List<String> out = ioStub.getPrints();
@@ -198,6 +218,11 @@ public class Stepdefs {
         }
         assertTrue(timeIsCorrect);
         deleteFile();
+    }
+
+    private void startApp() {
+        app = new App(sqliteDb, ioStub, search, verifier, bookApi);
+        app.switchContext();
     }
 
     private void initializeBooks() {
