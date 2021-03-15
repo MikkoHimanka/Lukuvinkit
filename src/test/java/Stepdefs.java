@@ -65,6 +65,11 @@ public class Stepdefs {
         initializeBooks();
     }
 
+    @When("tietokantaan tallennetaan lukuvinkki aikaleimalla {string}")
+    public void addExampleBook(String time) {
+        initializeBook(time);
+    }
+
     @When("tietokantaan tallennetaan linkki {string} otsikolla {string}")
     public void addBooks(String link, String title) {
         sqliteDb.create(new Book(link, title));
@@ -72,12 +77,13 @@ public class Stepdefs {
 
     @When("suoritetaan komennot:")
     public void the_following_animals(List<String> commands) {
-        for(String command: commands) {
+        for (String command : commands) {
             ioStub.addInput(command);
         }
         ioStub.addInput("s");
         startApp();
     }
+
     @When("haetaan lukuvinkeista komennoilla {string}, {string} ja syotetaan hakuehto {string}")
     public void searchBook(String command1, String command2, String searchParameter) {
         ioStub.addInput(command1);
@@ -86,7 +92,7 @@ public class Stepdefs {
         ioStub.addInput("s");
         startApp();
     }
-
+    
     @When("valitaan komento {string} ja syotetaan linkki {string} seka otsikko {string}, eika syoteta tageja tietoja pyydettaessa")
     public void linkAndTitleAreEntered(String command, String link, String title) {
         ioStub.addInput(command);
@@ -175,7 +181,7 @@ public class Stepdefs {
     public void systemListsBooks() {
         List<String> out = ioStub.getPrints();
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
-        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");;
+        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
         assertTrue(out.contains("Linkki: www.bing.com"));
         assertTrue(out.contains("Linkki: www.bing.com"));
         assertTrue(out.contains("Linkki: www.is.fi"));
@@ -198,6 +204,21 @@ public class Stepdefs {
 
         assertTrue(stringIndexA < stringIndexB);
     }
+  
+    @Then("sovellus nayttaa lukuvinkille oikean lisaysajan")
+    public void timestampIsCorrect() throws SQLException {
+        List<String> out = ioStub.getPrints();
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
+        boolean timeIsCorrect = false;
+        for (String row : out) {
+            if (row.matches("Luotu: [0-9]{2}-[0-9]{2}-[0-9]{4} kello [0-9]{2}:[0-9]{2}")) {
+                timeIsCorrect = true;
+            }
+        }
+        assertTrue(timeIsCorrect);
+        deleteFile();
+    }
 
     private void startApp() {
         app = new App(sqliteDb, ioStub, search, verifier, bookApi);
@@ -207,6 +228,10 @@ public class Stepdefs {
     private void initializeBooks() {
         sqliteDb.create(new Book("www.google.com", "", 1, "01-01-2000 kello 00:00"));
         sqliteDb.create(new Book("www.bing.com", "", 2, "01-01-2000 kello 00:00"));
+    }
+
+    private void initializeBook(String time) {
+        sqliteDb.create(new Book("www.google.com", "hakukone", 1, time));
     }
 
     private void deleteFile() throws SQLException {
