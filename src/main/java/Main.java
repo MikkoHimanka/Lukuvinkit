@@ -19,7 +19,7 @@ public class Main {
         }
         URLVerifier urlVerifier = new URLVerifier(connection);
         ConsoleIO consoleIO = new ConsoleIO();
-        SqliteBookDao sql = new SqliteBookDao("testi.db");
+        SqliteBookDao sql = new SqliteBookDao("sampledata.db");
         Search search = new Search(3.0);
         GoogleBookApi api = new GoogleBookApi();
         App app = new App(sql, consoleIO, search, urlVerifier, api);

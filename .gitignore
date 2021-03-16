@@ -2,4 +2,5 @@ build
 .gradle
 .idea
 *.db
+!sampledata.db
 .env
