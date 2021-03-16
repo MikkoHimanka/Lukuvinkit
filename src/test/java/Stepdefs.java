@@ -18,6 +18,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class Stepdefs {
     SqliteBookDao sqliteDb;
     Search search;
     URLVerifier verifier;
-    BookApi bookApi;
+    StubApi bookApi;
 
     @Before
     public void setup() {
@@ -55,9 +57,29 @@ public class Stepdefs {
         verifier = new URLVerifier(connection);
     }
 
+    @Given("testiapi on alustettu")
+    public void initApi() {
+        bookApi.addBook(new Book("www.x.fi", "otsikko"));
+    }
+
+    @Given("testiapi on alustettu niin etta se ei loyda kirjaa")
+    public void initWrongApi() {
+        // ei tehda mitaan
+    }
+
     @Given("tietokanta on alustettu")
     public void databaseIsInitialized() throws SQLException {
         sqliteDb = new SqliteBookDao("test.db");
+    }
+
+    @Given("tietokannassa on esimerkkikirjasto")
+    public void exampleLibrary() {
+        sqliteDb.create(new Book("www.google.com", "Google", 0, "hakukone", "31-01-2021 kello 12:31"));
+        sqliteDb.create(new Book("www.bing.com", "Bing", 1, "hakukone", "31-01-2021 kello 12:32"));
+        sqliteDb.create(new Book("www.oracle.com", "Oracle", 2, "Java", "01-02-2021 kello 12:33"));
+        sqliteDb.create(new Book("www.fox.com", "Fox", 3, "TV kanava", "01-02-2021 kello 22:13"));
+        sqliteDb.create(new Book("www.github.com", "Github", 4, "VCS", "01-02-2021 kello 22:13"));
+        sqliteDb.create(new Book("www.is.fi", "Ilta Sanomat", 5, "Iltapaivalehti", "01-02-2021 kello 22:13"));
     }
 
     @When("tietokantaan tallennetaan kaksi lukuvinkkia")
@@ -80,6 +102,14 @@ public class Stepdefs {
         for (String command : commands) {
             ioStub.addInput(command);
         }
+        ioStub.addInput("s");
+        startApp();
+    }
+
+    @When("yritetaan hakea kirja vaaralla isbn-tunnuksella")
+    public void IsbnWrongCode() {
+        ioStub.addInput("i");
+        ioStub.addInput("ei toimi"); // ei ole valia, api on stub
         ioStub.addInput("s");
         startApp();
     }
@@ -109,16 +139,6 @@ public class Stepdefs {
         ioStub.addInput(command);
         ioStub.addInput("s");
         startApp();
-    }
-
-    @Given("tietokannassa on esimerkkikirjasto")
-    public void exampleLibrary() {
-        sqliteDb.create(new Book("www.google.com", "Google", 0, "hakukone", "31-01-2021 kello 12:31"));
-        sqliteDb.create(new Book("www.bing.com", "Bing", 1, "hakukone", "31-01-2021 kello 12:32"));
-        sqliteDb.create(new Book("www.oracle.com", "Oracle", 2, "Java", "01-02-2021 kello 12:33"));
-        sqliteDb.create(new Book("www.fox.com", "Fox", 3, "TV kanava", "01-02-2021 kello 22:13"));
-        sqliteDb.create(new Book("www.github.com", "Github", 4, "VCS", "01-02-2021 kello 22:13"));
-        sqliteDb.create(new Book("www.is.fi", "Ilta Sanomat", 5, "Iltapaivalehti", "01-02-2021 kello 22:13"));
     }
 
     @When("valitaan komento {string} ja syotetaan linkki {string} linkkia pyydettaessa")
@@ -158,6 +178,26 @@ public class Stepdefs {
         startApp();
     }
 
+    @When("yritetaan hakea kirja oikealla isbn-tunnuksella")
+    public void createBookIsbn() {
+        ioStub.addInput("i");
+        ioStub.addInput("toimii"); // ei ole valia, api on stub
+    }
+
+    @When("vahvistetaan kirjan lisays")
+    public void confirmAdd() {
+        ioStub.addInput("k");
+        ioStub.addInput("s");
+        startApp();
+    }
+
+    @When("ei vahvisteta kirjan lisaysta")
+    public void rejectAdd() {
+        ioStub.addInput("e");
+        ioStub.addInput("s");
+        startApp();
+    }
+
     @Then("sovellus hyvaksyy syotteet ja tulostaa {string}")
     public void bookIsAddedToList(String print) throws SQLException {
         List<String> out = ioStub.getPrints();
@@ -174,6 +214,15 @@ public class Stepdefs {
         assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
         assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
         assertTrue(out.contains(print));
+        deleteFile();
+    }
+
+    @Then("sovellus ei tulosta {string}")
+    public void systemDoesntPrint(String print) throws SQLException {
+        List<String> out = ioStub.getPrints();
+        assertEquals(out.get(0), "Tervetuloa Lukuvinkit-sovellukseen!\n");
+        assertEquals(out.get(out.size() - 1), "Kiitos kaynnista, sovellus sulkeutuu.");
+        assertFalse(out.contains(print));
         deleteFile();
     }
 
