@@ -34,6 +34,7 @@ public class Stepdefs {
     Search search;
     URLVerifier verifier;
     StubApi bookApi;
+    StubNetworkConnection connection;
 
     @Before
     public void setup() {
@@ -52,7 +53,6 @@ public class Stepdefs {
         } catch (MalformedURLException ex) {
             throw new RuntimeException(ex);
         }
-        StubNetworkConnection connection;
         connection = new StubNetworkConnection(true, validUrls);
         verifier = new URLVerifier(connection);
     }
@@ -70,6 +70,11 @@ public class Stepdefs {
     @Given("tietokanta on alustettu")
     public void databaseIsInitialized() throws SQLException {
         sqliteDb = new SqliteBookDao("test.db");
+    }
+
+    @Given("internet-yhteys on pois paalta")
+    public void turnOffInternet() {
+        connection.setConnectionStatus(false);
     }
 
     @Given("tietokannassa on esimerkkikirjasto")
@@ -97,8 +102,17 @@ public class Stepdefs {
         sqliteDb.create(new Book(link, title));
     }
 
+    @When("tietokantaan tallennetaan linkki {string} otsikolla {string} ja tagilla {string}")
+    public void addBooks(String link, String title, String tag) {
+        Book book = new  Book(link, title);
+        sqliteDb.create(book);
+        List<String> tags = new ArrayList<String>();
+        tags.add(tag);
+        sqliteDb.addTags(book, tags);
+    }
+
     @When("suoritetaan komennot:")
-    public void the_following_animals(List<String> commands) {
+    public void execute_commands(List<String> commands) {
         for (String command : commands) {
             ioStub.addInput(command);
         }
@@ -132,6 +146,13 @@ public class Stepdefs {
         ioStub.addInput("");
         ioStub.addInput("s");
         startApp();
+    }
+    @When("tulosta debug io")
+    public void debug_io() {
+        List<String> out = ioStub.getPrints();
+        for(String x: out) {
+            System.out.println(x);
+        }
     }
 
     @When("valitaan komento {string}")
