@@ -46,7 +46,10 @@ Painamalla `L` käyttäjä voi tallentaa uuden lukuvinkin. Sovellus pyytää kä
 ```
 I
 ```
-Painamalla `I` käyttäjä voi tallentaa uuden lukuvinkin isbn-numeron perusteella.
+Painamalla `I` käyttäjä voi tallentaa uuden lukuvinkin isbn-numeron perusteella. **HUOM** Toiminnon käyttämiseen tarvitaan Googlen API-key. Ohjeet avaimen luomiseen löydät [täältä](https://developers.google.com/books/docs/v1/using#APIKey). Kun olet luonut avaimen, pitää luoda projektin juureen `.env`-tiedosto, joka sisältää yhden rivin:
+```
+API_KEY=<avain>
+```
 
 ## Lukuvinkkien näyttäminen
 ```
