@@ -30,3 +30,11 @@ Koodin laadun (luettavuuden) tarkkailuun emme käyttäneet mitään automaattist
 
 ## Yhteenveto
 Projekti oli siis pääosin hyvin onnistunut sekä projektityöskentelyn että teknisen puolen osalta. Oppimiskokemuksena projekti oli varmasti enemmän kuin yhden opintopisteen arvoinen, eikä mikään sen osa-alue tuntunut varsinaisesti turhalta.
+
+### Opiskelijat
+* Mikko Himanka
+* Tuomas Aaltonen
+* Leo Varis
+* Kalle Luopajärvi
+* Tapio Salonen
+
