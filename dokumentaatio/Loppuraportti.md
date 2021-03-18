@@ -1,4 +1,11 @@
 # Loppuraportti
+#### Opiskelijat
+* Mikko Himanka
+* Tuomas Aaltonen
+* Leo Varis
+* Kalle Luopajärvi
+* Tapio Salonen
+
 
 ## Lähtöasetelma
 Kellään ryhmämme jäsenistä ei ollut aikaisempaa kokemusta alan työtehtävistä tai varsinaisesta tiimityöskentelystä ohjelmistokehityksen parissa, joten lähdimme siltä osin miniprojektiin samalta viivalta. Teknisessä osaamisessa oli toki jonkin verran eroja opiskelijoiden välillä. Ryhmässämme oli myös python-projektiin orientoitunut opiskelija, mutta enemmistön päätöksellä päädyttiin Java-kieliseen toteutukseen.
@@ -31,10 +38,4 @@ Koodin laadun (luettavuuden) tarkkailuun emme käyttäneet mitään automaattist
 ## Yhteenveto
 Projekti oli siis pääosin hyvin onnistunut sekä projektityöskentelyn että teknisen puolen osalta. Oppimiskokemuksena projekti oli varmasti enemmän kuin yhden opintopisteen arvoinen, eikä mikään sen osa-alue tuntunut varsinaisesti turhalta.
 
-### Opiskelijat
-* Mikko Himanka
-* Tuomas Aaltonen
-* Leo Varis
-* Kalle Luopajärvi
-* Tapio Salonen
 
