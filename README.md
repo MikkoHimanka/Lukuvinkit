@@ -8,6 +8,8 @@ Ohjelmistotuotannon miniprojekti 2021. Sovelluksen käyttötarkoitus on lukuvink
 
 [Projektin backlog](https://docs.google.com/spreadsheets/d/1CIW-hC3u8IiUHmzEYxtJPugE3DNGhuz6VQ3V5sQlzJ4/edit?usp=sharing)
 
+[Loppuraportti](https://github.com/MikkoHimanka/Lukuvinkit/blob/main/dokumentaatio/Loppuraportti.md)
+
 ## Definition of done
 - Hyväksymiskriteerit täyttyvät
 - Koodi on yksikkötestattu ja testit menevät läpi
